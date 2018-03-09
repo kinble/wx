@@ -40,7 +40,7 @@
 			<p class="comName clearfix"><span>设备类型</span>
         <select class="machineType" class="text" style="-webkit-appearance:none;appearance:none;border:none;padding:0px 10px;display:block;-webkit-box-sizing:border-box;box-sizing:border-box;background-color: #FFFFFF;color:#333333;border-radius:4px;">
             <option value="ETC">--电子标签--</option>
-            <option value="U-ETC">--非电子标签--</option>
+            <option value="UNITOLL_ETC">--非电子标签--</option>
         </select>
 			</p>
 			<p class="comName clearfix"><span>SN号</span>
