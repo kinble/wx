@@ -1,0 +1,23 @@
+@charset "utf-8";
+/* CSS Document */
+html,body,ul,ol,li,p,h1,h2,h3,h4,h5,h6,form,fieldset,table,th,td,img,div,dl,dt,dd,input,button,pre,input,textarea,blockquote{margin:0;padding:0; font-family: "微软雅黑"; line-height: 1;}
+img{border:none;}
+ul,li{list-style:none;list-style-type:none;}
+input,select,textarea{outline:none;border:none; background:none;}
+textarea{resize:none;-webkit-appearance: none;}
+a{text-decoration:none;}
+i,em{font-style: normal;}
+h1,h2,h3,h4,h5,h6{font-weight: normal;}
+table{border-collapse: collapse;}
+input[type="button"], input[type="submit"], input[type="reset"] {
+-webkit-appearance: none;
+}
+div,a,input{
+	tap-highlight-color: rgba(0, 0, 0, 0);
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+/*清浮动*/
+.clearfix:after{content:"";display:block;clear:both; visibility: hidden;}
+.clearfix{zoom:1;}
+.fl{float:left;}
+.fr{float:right;}
