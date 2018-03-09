@@ -30,24 +30,61 @@ public class WeixinApiController extends ApiController {
 	public void createMenu()
 	{
 		String str = "{\n" +
-				"    \"button\": [\n" +
-				"        {\n" +
-				"            \"name\": \"进入理财\",\n" +
-				"            \"url\": \"http://m.bajie8.com/bajie/enter\",\n" +
-				"            \"type\": \"view\"\n" +
-				"        },\n" +
-				"        {\n" +
-				"            \"name\": \"安全保障\",\n" +
-				"            \"key\": \"112\",\n" +
-				"\t    \"type\": \"click\"\n" +
-				"        },\n" +
-				"        {\n" +
-				"\t    \"name\": \"使用帮助\",\n" +
-				"\t    \"url\": \"http://m.bajie8.com/footer/cjwt\",\n" +
-				"\t    \"type\": \"view\"\n" +
-				"        }\n" +
-				"    ]\n" +
-				"}";
+				"     \"button\":[\n" +
+				"     {    \n" +
+				"          \"name\":\"自助服务\",\n" +
+				"\t\t  \"sub_button\":[\n" +
+				"           {    \n" +
+				"               \"type\":\"view\",\n" +
+				"               \"name\":\"在线报修\",\n" +
+				"\t\t\t   \"url\":\"http://t8pg9w.natappfree.cc/redirect?state=bx\"\n" +
+				"            },\n" +
+				"            {\n" +
+				"               \"type\":\"view\",\n" +
+				"               \"name\":\"在线报障\",\n" +
+				"\t\t\t   \"url\":\"http://t8pg9w.natappfree.cc/redirect?state=bz\"\n" +
+				"            },\n" +
+				"            {\n" +
+				"               \"type\":\"click\",\n" +
+				"               \"name\":\"在线支付\",\n" +
+				"\t\t\t   \"key\":\"V1001_ZZFF_ZXZF\"\n" +
+				"            },\n" +
+				"            {\n" +
+				"               \"type\":\"click\",\n" +
+				"               \"name\":\"常用联系方式\",\n" +
+				"\t\t\t   \"key\":\"V1001_ZZFF_CYLXFS\"\n" +
+				"            }]\n" +
+				"      },\n" +
+				"      {\n" +
+				"           \"name\":\"人工服务\",\n" +
+				"\t\t   \"sub_button\":[\n" +
+				"           {    \n" +
+				"               \"type\":\"click\",\n" +
+				"               \"name\":\"在线客服\",\n" +
+				"\t\t\t   \"key\":\"V1001_RGFW_ZXKF\"\n" +
+				"            },\n" +
+				"            {\n" +
+				"               \"type\":\"view\",\n" +
+				"               \"name\":\"在线留言\",\n" +
+				"\t\t\t   \"url\":\"http://t8pg9w.natappfree.cc/redirect?state=zxly\"\n" +
+				"            }]\n" +
+				"           \n" +
+				"      },\n" +
+				"      {\n" +
+				"           \"name\":\"更多服务\",\n" +
+				"           \"sub_button\":[\n" +
+				"           {    \n" +
+				"               \"type\":\"click\",\n" +
+				"               \"name\":\"常见问题\",\n" +
+				"\t\t\t   \"key\":\"V1001_GDFF_CJWT\"\n" +
+				"            },\n" +
+				"            {\n" +
+				"               \"type\":\"click\",\n" +
+				"               \"name\":\"其他链接\",\n" +
+				"\t\t\t   \"key\":\"V1001_GDFF_QTLJ\"\n" +
+				"            }]\n" +
+				"       }]\n" +
+				" }";
 		ApiResult apiResult = MenuApi.createMenu(str);
 		if (apiResult.isSucceed())
 			renderText(apiResult.getJson());
@@ -69,7 +106,7 @@ public class WeixinApiController extends ApiController {
 	 */
 	public void getUserInfo()
 	{
-		ApiResult apiResult = UserApi.getUserInfo("ohbweuNYB_heu_buiBWZtwgi4xzU");
+		ApiResult apiResult = UserApi.getUserInfo("oLdOB1NY_i_eRbTvPsDQH_iirgMc");
 		renderText(apiResult.getJson());
 	}
 
@@ -79,7 +116,7 @@ public class WeixinApiController extends ApiController {
 	public void sendMsg()
 	{
 		String str = " {\n" +
-				"           \"touser\":\"ohbweuNYB_heu_buiBWZtwgi4xzU\",\n" +
+				"           \"touser\":\"oLdOB1NY_i_eRbTvPsDQH_iirgMc\",\n" +
 				"           \"template_id\":\"9SIa8ph1403NEM3qk3z9-go-p4kBMeh-HGepQZVdA7w\",\n" +
 				"           \"url\":\"http://www.sina.com\",\n" +
 				"           \"topcolor\":\"#FF0000\",\n" +

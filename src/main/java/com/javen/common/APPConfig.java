@@ -14,18 +14,15 @@ import com.javen.controller.FileController;
 import com.javen.controller.IndexController;
 import com.javen.controller.JSSDKController;
 import com.javen.controller.TUserController;
-import com.javen.model.Course;
-import com.javen.model.Idea;
-import com.javen.model.Order;
-import com.javen.model.Stock;
-import com.javen.model.TUser;
-import com.javen.model.Users;
+import com.javen.controller.RedirectController;
+import com.javen.model.*;
 import com.javen.weixin.controller.RedPackApiController;
 import com.javen.weixin.controller.WeiXinOauthController;
 import com.javen.weixin.controller.WeixinApiController;
 import com.javen.weixin.controller.WeixinMsgController;
 import com.javen.weixin.controller.WeixinPayController;
 import com.javen.weixin.controller.WeixinTransfersController;
+import com.javen.weixin.genvict.ScmController;
 import com.javen.weixin.user.UserController;
 import com.jfinal.config.Constants;
 import com.jfinal.config.Handlers;
@@ -116,6 +113,7 @@ public class APPConfig extends JFinalConfig {
 		me.add("/msg", WeixinMsgController.class);
 		me.add("/api", WeixinApiController.class);
 		me.add("/oauth", WeiXinOauthController.class);
+		me.add("/redirect", RedirectController.class ,"/back");
 		me.add("/jssdk", JSSDKController.class, "/view");
 		// 可以去掉 /front
 		me.add("/pay", WeixinPayController.class, "/view");
@@ -131,6 +129,9 @@ public class APPConfig extends JFinalConfig {
 		me.add("/read", RedPackApiController.class);
 		me.add("/transfers", WeixinTransfersController.class);
 		me.add("/allpay", AllPayController.class);
+		me.add("/scm", ScmController.class);
+
+
 	}
 
 	/**
@@ -149,6 +150,8 @@ public class APPConfig extends JFinalConfig {
 		arp.addMapping("Tuser", TUser.class);
 		arp.addMapping("stock", Stock.class);
 		arp.addMapping("idea", Idea.class);
+		arp.addMapping("tb_Customer", TbCustomer.class);
+		arp.addMapping("tb_Order_Headers", TbOrderHeaders.class);
 		arp.setShowSql(PropKit.getBoolean("devMode", false));
 		me.add(arp);
 
