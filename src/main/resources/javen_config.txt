@@ -2,14 +2,6 @@
 #user = root
 #password =123
 
-jdbcUrl =jdbc:mysql://120.25.120.230:3306/genvict?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
-user = root
-password =iRpBtqQaWj55
-
-#jdbcUrl = jdbc:mysql://120.25.120.230:3306/genvict?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&failOverReadOnly=false
-#user = root
-#password = iRpBtqQaWj55
-
 devMode = true
 
 # 微信服务器回调所用的 token
