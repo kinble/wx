@@ -18,10 +18,13 @@ public class TUserController extends Controller {
 		paras.put("order", "lastLoginDate desc");
 //		paras.put("limit", "1");
 		List<TUser> users = TUser.dao.findByMap(paras);
-		
+
 		System.out.println(JsonKit.toJson(users));
 		
 		setAttr("users", users);
+		System.out.println("openId====================2222222222"+getAttr("openId"));
+		setAttr("openId",getRequest().getAttribute("openId"));
+		System.out.println("openId===================="+getRequest().getAttribute("openId"));
 		render("tuser.jsp");
 	}
 	

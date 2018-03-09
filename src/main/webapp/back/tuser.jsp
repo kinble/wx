@@ -24,8 +24,8 @@
 		
    	<div class="hd">
         <h1 class="page_title"><img alt="" width="80px"  height="80px" src="/images/logo.png"></h1>
-        <p class="page_desc">极速开发微信公众号</p>
-        <p class="page_desc">注册会员列表</p><br>
+        <p class="page_desc">极速开发微信公众号><%=request.getSession().getAttribute("openId")%></p>
+        <p class="page_desc">注册会员列表<%=request.getAttribute("openId2")%></p><br>
         <p class="page_desc error" >总共 ${fn:length(users)} 个注册用户</p><br>
    	</div>
    	

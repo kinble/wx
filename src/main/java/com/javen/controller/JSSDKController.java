@@ -17,7 +17,16 @@ public class JSSDKController extends Controller{
 	public void index(){
 		render("share.jsp");
 	}
-	
+
+	public void close(){
+		render("close.jsp");
+	}
+
+	public void jpay(){
+		render("jpay.jsp");
+	}
+
+
 	public void customer(){
 		render("customer.jsp");
 	}

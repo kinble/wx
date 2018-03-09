@@ -2,6 +2,7 @@ package com.javen.weixin.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.javen.model.TbCustomer;
 import com.javen.model.Users;
 import com.javen.utils.WeiXinUtils;
 import com.jfinal.kit.JsonKit;
@@ -58,7 +59,8 @@ public class WeiXinOauthController extends ApiController{
 			String token=snsAccessToken.getAccessToken();
 			String openId=snsAccessToken.getOpenid();
 			//拉取用户信息(需scope为 snsapi_userinfo)
-			ApiResult apiResult=SnsApi.getUserInfo(token, openId);
+			ApiResult apiResult = UserApi.getUserInfo(openId);
+			//ApiResult apiResult=SnsApi.getUserInfo(token, openId);
 			
 			log.warn("getUserInfo:"+apiResult.getJson());
 			if (apiResult.isSucceed()) {
@@ -83,12 +85,22 @@ public class WeiXinOauthController extends ApiController{
 			}
 			
 			setSessionAttr("openId", openId);
-			if (subscribe==0) {
-				redirect(PropKit.get("subscribe_rul"));
-			}else {
+			if (true) {
 				//根据state 跳转到不同的页面
-				if (state.equals("2222")) {
-					redirect("http://www.cnblogs.com/zyw-205520/");
+				if (state.equals("bx")) {//保修
+					//redirect("/back/tuser.jsp");
+					TbCustomer tbCustomer = TbCustomer.me.findByOpenId(openId);
+					if(null != tbCustomer){
+						setSessionAttr("customer_name",tbCustomer.get("customer_name"));
+						setSessionAttr("customer_mobile",tbCustomer.get("customer_mobile"));
+						setSessionAttr("company_address",tbCustomer.get("company_address"));
+					}
+					redirect("/static/online_fix.html");
+					//forwardAction("/static/online_fix.html");
+				}else if (state.equals("bz"))  {//报障
+					forwardAction("/view/close.jsp");
+				}else if (state.equals("zxly"))  {
+					redirect("/view/message.jsp");
 				}else {
 					redirect("/login");
 				}
