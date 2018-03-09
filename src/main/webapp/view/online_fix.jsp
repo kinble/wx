@@ -1,3 +1,9 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%
+	String path = request.getContextPath();
+	String basePath = request.getScheme() + "://" + request.getServerName() + path;
+%>
 <!doctype html>
 <html lang="en">
 <head>
@@ -6,8 +12,8 @@
     <meta http-equiv="Cache-Control" content="no-siteapp">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta content="telephone=no" name="format-detection" />
-    <link rel="stylesheet" type="text/css" href="css/reset.css">
-    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css">
     <title>在线报修</title>
 
 </head>
@@ -91,12 +97,12 @@
 			</ul>
 		</div>
 	</div> -->
-<script src="dist/jquery.min.js"></script>
-<script src="js/common.js"></script>
-<script src="dist/picker.min.js"></script>
-<script src="dist/city.js"></script>
+<script src="/static/dist/jquery.min.js"></script>
+<script src="/static/js/common.js"></script>
+<script src="/static/dist/picker.min.js"></script>
+<script src="/static/dist/city.js"></script>
  <!--<script src="dist/jquery.uploadView.js"></script>-->
-<script src="js/info.js"></script>
+<script src="/static/js/info.js"></script>
 <script>
 //	$("#imgInput_1").uploadView({
 //		uploadBox: '.js_showBox',//设置上传框容器

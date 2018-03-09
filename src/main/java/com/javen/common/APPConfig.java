@@ -210,8 +210,9 @@ public class APPConfig extends JFinalConfig {
 	}
 
 	@Override
-	public void configEngine(Engine arg0) {
-		
+	public void configEngine(Engine me) {
+		// devMode 配置为 true，将支持模板实时热加载
+		me.setDevMode(true);
 	}
 
 }
