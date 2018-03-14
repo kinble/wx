@@ -37,12 +37,12 @@ public class WeixinApiController extends ApiController {
 				"           {    \n" +
 				"               \"type\":\"view\",\n" +
 				"               \"name\":\"在线报修\",\n" +
-				"\t\t\t   \"url\":\"http://t8pg9w.natappfree.cc/redirect?state=bx\"\n" +
+				"\t\t\t   \"url\":\"http://kinble.s1.natapp.cc/redirect?state=bx\"\n" +
 				"            },\n" +
 				"            {\n" +
 				"               \"type\":\"view\",\n" +
 				"               \"name\":\"在线报障\",\n" +
-				"\t\t\t   \"url\":\"http://t8pg9w.natappfree.cc/redirect?state=bz\"\n" +
+				"\t\t\t   \"url\":\"http://kinble.s1.natapp.cc/redirect?state=bz\"\n" +
 				"            },\n" +
 				"            {\n" +
 				"               \"type\":\"click\",\n" +
@@ -66,7 +66,7 @@ public class WeixinApiController extends ApiController {
 				"            {\n" +
 				"               \"type\":\"view\",\n" +
 				"               \"name\":\"在线留言\",\n" +
-				"\t\t\t   \"url\":\"http://t8pg9w.natappfree.cc/redirect?state=zxly\"\n" +
+				"\t\t\t   \"url\":\"http://kinble.s1.natapp.cc/redirect?state=zxly\"\n" +
 				"            }]\n" +
 				"           \n" +
 				"      },\n" +

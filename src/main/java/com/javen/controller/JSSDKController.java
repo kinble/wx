@@ -13,9 +13,13 @@ import com.jfinal.core.Controller;
  */
 @Before(JSSDKInterceptor.class)
 public class JSSDKController extends Controller{
-	
+
 	public void index(){
 		render("share.jsp");
+	}
+
+	public void jssdk(){
+		render("jssdk.jsp");
 	}
 
 	public void close(){

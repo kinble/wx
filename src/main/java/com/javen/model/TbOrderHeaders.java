@@ -28,15 +28,19 @@ public class TbOrderHeaders extends Model<TbOrderHeaders> {
 	}
 
 
-	public TbOrderHeaders findByOpenId(String openId){
-		return this.findFirst("select * from tb_order_headers where weixin_id=?", openId);
-	}
 
-
-	public TbOrderHeaders findNeedPayByOpenId(String openId){
+	public TbOrderHeaders findNeedPayByOpenId(String openId,String orderId){
+		if(orderId != null){
+			this.findById(orderId);
+		}
 		return this.findFirst("select * from tb_order_headers where pay_status = 0" +
-				" and order_status != '' and shelf_life = 'Y' and open_id = ? ", openId);
+				" and order_status != '' and shelf_life = 'Y' and "+(null != orderId ? "id":"open_id")+" = ? and ifnull(is_repair,'') != 'N' ", openId);
 	}
+
+	public TbOrderHeaders findOneByOpenId(String openId){
+		return this.findFirst("select * from tb_order_headers where open_id = ? order by id desc ", openId);
+	}
+
 
 	/**
 	 * 根据map参数查找

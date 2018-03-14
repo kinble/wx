@@ -20,25 +20,15 @@ public class TbCustomer extends Model<TbCustomer> {
 	
 	public static final TbCustomer me = new TbCustomer();
 	
-	public boolean save(String openId){
-		
-		/**
-		 * 1、判断openId 是否存在 
-		 *    如果存在就update
-		 *    如果不存在就保存
-		 */
-		TbCustomer user = findByOpenId(openId);
-		if (user!=null) {
-			user.set("updateTime", new Date());
-			return user.update();
-		}else {
-			if (StrKit.notBlank(openId)) {
-				TbCustomer me = new TbCustomer();
-				me.set("updateTime", new Date());
-				return me.save();
-			}
-		}
-		return false;
+	public boolean save(String customer_name,String customer_address,String customer_mobile,String openId){
+		TbCustomer me = new TbCustomer();
+		me.set("weixin_id", openId);
+		me.set("customer_name", customer_name);
+		me.set("customer_address", customer_address);
+		me.set("customer_mobile", customer_mobile);
+		me.set("created_by", customer_name);
+		me.set("created_date", new Date());
+		 return me.save();
 	}
 	
 	public List<TbCustomer> getAll(){

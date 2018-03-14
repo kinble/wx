@@ -10,6 +10,7 @@ import com.javen.model.TbOrderHeaders;
 import com.javen.utils.WeiXinUtils;
 import com.javen.weixin.genvict.EventService;
 import com.javen.weixin.genvict.MenuEnum;
+import com.javen.weixin.genvict.ScmController;
 import com.javen.weixin.service.BaiduTranslate;
 import com.jfinal.kit.PropKit;
 import com.jfinal.log.Log;
@@ -248,7 +249,7 @@ public class WeixinMsgController extends MsgControllerAdapter {
 		{
 			logger.debug("关注：" + inFollowEvent.getFromUserName());
 			OutTextMsg outMsg = new OutTextMsg(inFollowEvent);
-			outMsg.setContent("谢谢你的关注:"+helpStr);
+			outMsg.setContent("欢迎使用金溢科技微信公众号服务!");
 			render(outMsg);
 		}
 		// 如果为取消关注事件，将无法接收到传回的信息
@@ -373,42 +374,32 @@ public class WeixinMsgController extends MsgControllerAdapter {
 		logger.debug("菜单事件：" + inMenuEvent.getFromUserName());
 
 		if(MenuEnum.MENU_ZXZF.getName().equals(inMenuEvent.getEventKey())){//在线支付
-
-			TbOrderHeaders order =TbOrderHeaders.me.findNeedPayByOpenId(openId);
-			if(order != null){
-				String msg="您好，送修的设备已经收到！根据合同约定，设备已超过保修期，如需维修须支付维修费用。本次维修金额为"+order.get("order_price")+"元。" +
-						"\n请选择：" +
-						"\n1.支付维修费用" +
-						"\n  <a href=\"http://t8pg9w.natappfree.cc/jssdk/jpay\">1.1 在线支付</a>" +
-						"\n  1.2 联系客服处理" +
-						"\n" +
-						"\n<a href=\"http://t8pg9w.natappfree.cc/jssdk/close\">2.不维修，设备原路返回。</a>";
-				renderOutTextMsg(msg);
-			}else{
-				String msg="您好，暂时没有需要支付的维修单。";
-				renderOutTextMsg(msg);
-			}
-
+			String msg= new ScmController().getPayMsg(openId,null);
+			renderOutTextMsg(msg);
 		}else if(MenuEnum.MENU_ZXKF.getName().equals(inMenuEvent.getEventKey())){//在线客服
-			OutTextMsg outMsg = new OutTextMsg(inMenuEvent);
-			outMsg.setContent("在呢亲，请问有什么可以帮您的？");
-			System.out.println("缓存--->"+ehCache.get("tenMinute",openId+"___serviceTimes"));
-			ehCache.put("tenMinute",openId+"___serviceTimes",new Date());
-			render(outMsg);
+			if((new Date().getHours() > 18) || (new Date().getHours() < 8)){
+				renderOutTextMsg("您好,我们的人工服务时间为: 08:00-18:00 您可以在线留言,我们将会及时跟进.谢谢配合. ");
+			}else{
+				OutTextMsg outMsg = new OutTextMsg(inMenuEvent);
+				outMsg.setContent("在呢亲，请问有什么可以帮您的？");
+				System.out.println("缓存--->"+ehCache.get("tenMinute",openId+"___serviceTimes"));
+				ehCache.put("tenMinute",openId+"___serviceTimes",new Date());
+				render(outMsg);
+			}
 		}else if(MenuEnum.MENU_LXFS.getName().equals(inMenuEvent.getEventKey())){//联系方式
 			OutTextMsg outMsg = new OutTextMsg(inMenuEvent);
-			outMsg.setContent("您好，我们的人工服务时间为：08:00-18:00，感谢您使用我们的服务！" +
+			outMsg.setContent("您好，我们的人工服务时间为：\n08:00-18:00，感谢您使用我们的服务！" +
 					"\n客服1电话:02088888888" +
 					"\n客服2电话:02099999999");
 			render(outMsg);
 		}else if(MenuEnum.MENU_QTLJ.getName().equals(inMenuEvent.getEventKey())){//常用链接
 			OutTextMsg outMsg = new OutTextMsg(inMenuEvent);
-			outMsg.setContent("公司官网:http://www.genvict.com/");
+			outMsg.setContent("公司官网:\nhttp://www.genvict.com/");
 			render(outMsg);
 		}else if(MenuEnum.MENU_BX.getName().equals(inMenuEvent.getEventKey())){//常用链接
-			String url="http://t8pg9w.natappfree.cc/jssdk/close";
+			String url="http://kinble.s1.natapp.cc/jssdk/close";
 			//String url=PropKit.get("domain")+"/view/message.jspjsp";
-			//String url="http://t8pg9w.natappfree.cc/redirect?state=my";
+			//String url="http://kinble.s1.natapp.cc/redirect?state=my";
 			//setAttr("openId",openId);
 			String urlStr="<a href=\""+url+"\">测试网页</a>";
 			renderOutTextMsg("地址"+urlStr);

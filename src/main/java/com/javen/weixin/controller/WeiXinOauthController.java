@@ -2,9 +2,12 @@ package com.javen.weixin.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.javen.interceptor.JSSDKInterceptor;
 import com.javen.model.TbCustomer;
+import com.javen.model.TbOrderHeaders;
 import com.javen.model.Users;
 import com.javen.utils.WeiXinUtils;
+import com.jfinal.aop.Before;
 import com.jfinal.kit.JsonKit;
 import com.jfinal.kit.PropKit;
 import com.jfinal.log.Log;
@@ -16,6 +19,10 @@ import com.jfinal.weixin.sdk.api.SnsAccessTokenApi;
 import com.jfinal.weixin.sdk.api.SnsApi;
 import com.jfinal.weixin.sdk.api.UserApi;
 import com.jfinal.weixin.sdk.jfinal.ApiController;
+
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author Javen
  * 2015年12月5日下午2:20:44
@@ -59,29 +66,28 @@ public class WeiXinOauthController extends ApiController{
 			String token=snsAccessToken.getAccessToken();
 			String openId=snsAccessToken.getOpenid();
 			//拉取用户信息(需scope为 snsapi_userinfo)
-			ApiResult apiResult = UserApi.getUserInfo(openId);
-			//ApiResult apiResult=SnsApi.getUserInfo(token, openId);
-			
-			log.warn("getUserInfo:"+apiResult.getJson());
-			if (apiResult.isSucceed()) {
-				JSONObject jsonObject=JSON.parseObject(apiResult.getJson());
-				String nickName=jsonObject.getString("nickname");
-				//用户的性别，值为1时是男性，值为2时是女性，值为0时是未知
-				int sex=jsonObject.getIntValue("sex");
-				String city=jsonObject.getString("city");//城市
-				String province=jsonObject.getString("province");//省份
-				String country=jsonObject.getString("country");//国家
-				String headimgurl=jsonObject.getString("headimgurl");
-				String unionid=jsonObject.getString("unionid");
-				//获取用户信息判断是否关注
-				ApiResult userInfo = UserApi.getUserInfo(openId);
-				log.warn(JsonKit.toJson("is subsribe>>"+userInfo));
-				if (userInfo.isSucceed()) {
-					String userStr = userInfo.toString();
-					subscribe=JSON.parseObject(userStr).getIntValue("subscribe");
+			if(false) {
+				ApiResult apiResult = UserApi.getUserInfo(openId);
+				log.warn("getUserInfo:" + apiResult.getJson());
+				if (apiResult.isSucceed()) {
+					JSONObject jsonObject = JSON.parseObject(apiResult.getJson());
+					String nickName = jsonObject.getString("nickname");
+					//用户的性别，值为1时是男性，值为2时是女性，值为0时是未知
+					int sex = jsonObject.getIntValue("sex");
+					String city = jsonObject.getString("city");//城市
+					String province = jsonObject.getString("province");//省份
+					String country = jsonObject.getString("country");//国家
+					String headimgurl = jsonObject.getString("headimgurl");
+					String unionid = jsonObject.getString("unionid");
+					//获取用户信息判断是否关注
+					ApiResult userInfo = UserApi.getUserInfo(openId);
+					log.warn(JsonKit.toJson("is subsribe>>" + userInfo));
+					if (userInfo.isSucceed()) {
+						String userStr = userInfo.toString();
+						subscribe = JSON.parseObject(userStr).getIntValue("subscribe");
+					}
+					Users.me.save(openId, WeiXinUtils.filterWeixinEmoji(nickName), unionid, headimgurl, country, city, province, sex);
 				}
-				
-				Users.me.save(openId, WeiXinUtils.filterWeixinEmoji(nickName), unionid, headimgurl, country, city, province, sex);
 			}
 			
 			setSessionAttr("openId", openId);
@@ -89,18 +95,29 @@ public class WeiXinOauthController extends ApiController{
 				//根据state 跳转到不同的页面
 				if (state.equals("bx")) {//保修
 					//redirect("/back/tuser.jsp");
-					TbCustomer tbCustomer = TbCustomer.me.findByOpenId(openId);
-					if(null != tbCustomer){
-						setSessionAttr("customer_name",tbCustomer.get("customer_name"));
-						setSessionAttr("customer_mobile",tbCustomer.get("customer_mobile"));
-						setSessionAttr("company_address",tbCustomer.get("company_address"));
+					TbOrderHeaders order = TbOrderHeaders.me.findOneByOpenId(openId);
+					if(null != order){
+						setSessionAttr("province",order.get("province"));
+						setSessionAttr("city",order.get("city"));
+						setSessionAttr("area",order.get("area"));
+						setSessionAttr("address",order.get("address"));
+						setSessionAttr("link_name",order.get("link_name"));
+						setSessionAttr("mobile",order.get("mobile"));
 					}
-					redirect("/static/online_fix.html");
+					render("/view/online_fix.jsp");
 					//forwardAction("/static/online_fix.html");
 				}else if (state.equals("bz"))  {//报障
 					forwardAction("/view/close.jsp");
 				}else if (state.equals("zxly"))  {
-					redirect("/view/message.jsp");
+
+					TbCustomer cust = TbCustomer.me.findByOpenId(openId);
+					if(null != cust){
+						setSessionAttr("customer_name",cust.get("customer_name"));
+						setSessionAttr("customer_mobile",cust.get("customer_mobile"));
+					}
+					render("/view/message.jsp");
+				}else if (state.equals("pay"))  {
+					render("/view/customer.jsp");
 				}else {
 					redirect("/login");
 				}

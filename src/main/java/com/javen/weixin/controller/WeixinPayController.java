@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +17,9 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.javen.entity.PayAttach;
 import com.javen.kit.ZxingKit;
+import com.javen.model.BdPayLog;
 import com.javen.model.Order;
+import com.javen.model.TbOrderHeaders;
 import com.javen.utils.StringUtils;
 import com.javen.vo.AjaxResult;
 import com.jfinal.kit.HttpKit;
@@ -25,6 +29,8 @@ import com.jfinal.kit.PropKit;
 import com.jfinal.kit.StrKit;
 import com.jfinal.log.Log;
 import com.jfinal.weixin.sdk.api.ApiConfig;
+import com.jfinal.weixin.sdk.api.ApiResult;
+import com.jfinal.weixin.sdk.api.CustomServiceApi;
 import com.jfinal.weixin.sdk.api.PaymentApi;
 import com.jfinal.weixin.sdk.api.PaymentApi.TradeType;
 import com.jfinal.weixin.sdk.jfinal.ApiController;
@@ -85,6 +91,7 @@ public class WeixinPayController extends ApiController {
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("appid", appid);
 		params.put("mch_id", partner);
+		params.put("openid", openId);
 		params.put("body", "Javen微信公众号极速开发");
 		String out_trade_no=System.currentTimeMillis()+"";
 		params.put("out_trade_no", out_trade_no);
@@ -140,19 +147,105 @@ public class WeixinPayController extends ApiController {
 		ajax.success(jsonStr);
 		renderJson(ajax);
 	}
-	
+
+
+	/**
+	 * 金溢支付
+	 */
+	public void gpay() {
+		String orderId = getPara("orderId");
+		String openId = null;
+		BigDecimal total_fee = new BigDecimal(0);
+		if (StrKit.isBlank(orderId)) {
+			ajax.addError("维修单无效!");
+			renderJson(ajax);
+			return;
+		}
+
+		TbOrderHeaders order = TbOrderHeaders.me.findById(orderId);
+		if (order != null && "0".equals(order.get("pay_status")+"") && "Y".equals(order.get("shelf_life")+"")
+				&& !"N".equals(order.get("is_repair")+"") ) {
+			openId = order.get("open_id");
+			total_fee = order.get("order_price");
+		} else {
+			ajax.addError("维修单状态无效,无法支付!");
+			renderJson(ajax);
+			return;
+		}
+
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("appid", appid);
+		params.put("mch_id", partner);
+		params.put("body", "金溢科技在线报修维修费用");
+		String out_trade_no = orderId + "___" + System.currentTimeMillis() + "";
+		params.put("out_trade_no", out_trade_no);
+		int price = total_fee.multiply(new BigDecimal(100)).intValue();
+		params.put("total_fee", price + "");
+		params.put("attach", JsonKit.toJson(new PayAttach(out_trade_no, 2, 3)));
+
+		String ip = IpKit.getRealIp(getRequest());
+		if (StrKit.isBlank(ip)) {
+			ip = "127.0.0.1";
+		}
+		params.put("spbill_create_ip", ip);
+		params.put("trade_type", TradeType.JSAPI.name());
+		params.put("nonce_str", System.currentTimeMillis() / 1000 + "");
+		params.put("notify_url", notify_url);
+		params.put("openid", openId);
+
+		String sign = PaymentKit.createSign(params, paternerKey);
+		params.put("sign", sign);
+
+		String xmlResult = PaymentApi.pushOrder(params);
+
+		System.out.println(xmlResult);
+		Map<String, String> result = PaymentKit.xmlToMap(xmlResult);
+
+		String return_code = result.get("return_code");
+		String return_msg = result.get("return_msg");
+		if (StrKit.isBlank(return_code) || !"SUCCESS".equals(return_code)) {
+			ajax.addError(return_msg);
+			renderJson(ajax);
+			return;
+		}
+		String result_code = result.get("result_code");
+		if (StrKit.isBlank(result_code) || !"SUCCESS".equals(result_code)) {
+			ajax.addError(return_msg);
+			renderJson(ajax);
+			return;
+		}
+
+		//记录支付日志
+		BdPayLog.me.save("ZXBX",Integer.valueOf(orderId),"WeixinPay",out_trade_no,
+				null,total_fee,"NEW",null,openId);
+
+		// 以下字段在return_code 和result_code都为SUCCESS的时候有返回
+		String prepay_id = result.get("prepay_id");
+
+		Map<String, String> packageParams = new HashMap<String, String>();
+		packageParams.put("appId", appid);
+		packageParams.put("timeStamp", System.currentTimeMillis() / 1000 + "");
+		packageParams.put("nonceStr", System.currentTimeMillis() + "");
+		packageParams.put("package", "prepay_id=" + prepay_id);
+		packageParams.put("signType", "MD5");
+		String packageSign = PaymentKit.createSign(packageParams, paternerKey);
+		packageParams.put("paySign", packageSign);
+
+		String jsonStr = JsonUtils.toJson(packageParams);
+		ajax.success(jsonStr);
+		renderJson(ajax);
+		return;
+	}
+
 	public void pay_notify() {
 		//获取所有的参数
 		StringBuffer sbf=new StringBuffer();
-				 
 		Enumeration<String>  en=getParaNames();
 		while (en.hasMoreElements()) {
 			Object o= en.nextElement();
 			sbf.append(o.toString()+"="+getPara(o.toString()));
 		}
-		
 		log.error("支付通知参数："+sbf.toString());
-		
 		// 支付结果通用通知文档: https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_7
 		String xmlMsg = HttpKit.readData(getRequest());
 		System.out.println("支付通知="+xmlMsg);
@@ -176,7 +269,7 @@ public class WeixinPayController extends ApiController {
 		// 商户订单号
 		String out_trade_no      = params.get("out_trade_no");
 		// 支付完成时间，格式为yyyyMMddHHmmss
-		String time_end      = params.get("time_end");
+		String time_end = params.get("time_end");
 		
 		/////////////////////////////以下是附加参数///////////////////////////////////
 		
@@ -186,24 +279,57 @@ public class WeixinPayController extends ApiController {
 		String err_code      = params.get("err_code");
 		String err_code_des      = params.get("err_code_des");
 		
-		
 		// 注意重复通知的情况，同一订单号可能收到多次通知，请注意一定先判断订单状态
 		// 避免已经成功、关闭、退款的订单被再次更新
-		Order order = Order.dao.getOrderByTransactionId(transaction_id);
-		if (order==null) {
-			if(PaymentKit.verifyNotify(params, paternerKey)){
-				if (("SUCCESS").equals(result_code)) {
-					//更新订单信息
-					log.warn("更新订单信息:"+attach);
-					
-					//发送通知等
-					
-					Map<String, String> xml = new HashMap<String, String>();
-					xml.put("return_code", "SUCCESS");
-					xml.put("return_msg", "OK");
-					renderText(PaymentKit.toXml(xml));
-					return;
+		if(PaymentKit.verifyNotify(params, paternerKey)){
+			if (("SUCCESS").equals(result_code)) {
+				BdPayLog bdPayLog =BdPayLog.me.findByOutTradeNo(out_trade_no);
+				TbOrderHeaders order = TbOrderHeaders.me.findById(bdPayLog.get("source_header_id"));
+				if(!transaction_id.equals(bdPayLog.get("pay_no"))){
+					bdPayLog.set("pay_no",transaction_id);
+					bdPayLog.set("last_update_date",new Date());
+					bdPayLog.set("status","SUCCESS");
+					if(order != null){
+						BigDecimal wx_total_fee = new BigDecimal(total_fee).divide(new BigDecimal(100));
+						BigDecimal order_price = order.get("order_price");
+						if(wx_total_fee.compareTo(order_price) != 0){
+							bdPayLog.set("remark","支付金额和订单金额不一致!支付金额:"+wx_total_fee+",订单金额:"+order_price);
+						}
+
+						if(!"COMPLETE".equals(order.get("order_status")))order.set("order_status","APPROVED");
+						order.set("pay_status",1);
+						order.set("pay_type","在线支付");
+						order.set("pay_no",transaction_id);
+						order.update();
+					}
+					bdPayLog.update();
+				}else{
+					//如果已经回调过那么不处理
+					if(order != null && !"1".equals(order.get("pay_status")+"")){
+						if(!"COMPLETE".equals(order.get("order_status")))order.set("order_status","APPROVED");
+						order.set("pay_status",1);
+						order.set("pay_type","在线支付");
+						order.set("pay_no",transaction_id);
+						order.update();
+					}
 				}
+				//if("广东省".equals(order.get("province"))){
+					if("ETC".equals(order.get("machine_type"))){
+						ApiResult sendText = CustomServiceApi.sendText(openId,
+								"订单"+order.get("order_num")+"支付成功！\n您送修的设备已经维修完毕，请在3个工作日后前往送修的营业厅领取设备及发票。感谢您使用金溢科技客户服务！");
+					}else{
+						ApiResult sendText = CustomServiceApi.sendText(openId,
+								"订单"+order.get("order_num")+"支付成功！待设备修好回寄时我们将另行通知。感谢您使用金溢科技客户服务！\n<a href=\"" + PropKit.get("domain") + "/view/gpay?orderId=" + order.get("id") + "\">如需开具发票点击这里</a>");
+					}
+				//}
+				log.warn("更新订单信息:"+attach);
+				//发送通知等
+
+				Map<String, String> xml = new HashMap<String, String>();
+				xml.put("return_code", "SUCCESS");
+				xml.put("return_msg", "OK");
+				renderText(PaymentKit.toXml(xml));
+				return;
 			}
 		}
 		renderText("");

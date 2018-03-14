@@ -150,8 +150,11 @@ public class APPConfig extends JFinalConfig {
 		arp.addMapping("Tuser", TUser.class);
 		arp.addMapping("stock", Stock.class);
 		arp.addMapping("idea", Idea.class);
-		arp.addMapping("tb_Customer", TbCustomer.class);
-		arp.addMapping("tb_Order_Headers", TbOrderHeaders.class);
+		arp.addMapping("tb_customer", TbCustomer.class);
+		arp.addMapping("tb_order_headers", TbOrderHeaders.class);
+		arp.addMapping("bd_pay_log", BdPayLog.class);
+		arp.addMapping("tb_message", TbMessage.class);
+
 		arp.setShowSql(PropKit.getBoolean("devMode", false));
 		me.add(arp);
 
