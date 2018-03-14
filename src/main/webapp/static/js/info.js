@@ -78,8 +78,30 @@ function perfectAjax(type){
             }
         });
     }
-
 }
+
+function infoLoad() {
+  orderId=getwindowUrl().orderId;
+  $.get("http://192.168.3.15:8081/genvict/findOrderBackCallController.action",
+  {orderId:orderId}, function(info){
+    console.log(info);
+    if ("SUCCESS" == info.RESPONSETYPE) {
+      info = info.RESPONSEMESSAGE;
+      $(".userInfo .linkName").text(info.linkName);
+      $(".userInfo .mobile").text(info.mobile);
+      $(".userInfo .machineType").text(info.machineType);
+      $(".userInfo .shelfLife").text(info.shelfLife == "Y" ? "是" : "否 ");
+      $(".userInfo .snCode").text(info.snCode);
+      $(".userInfo .description").text(info.description);
+      $(".userInfo .pca").text(info.province + " " + info.city + " " + info.area);
+      $(".userInfo .address").text(info.address);
+      $(".userInfo .orderNum").text(info.orderNum);
+      $(".userInfo .orderPrice").text(info.orderPrice);
+    }
+  });
+}
+
+
 $(".submitAudit").on("touchstart" , function(){
     perfectAjax(0)
 })

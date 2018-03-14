@@ -6,19 +6,19 @@
             var width = docEle.clientWidth;
             width && (docEle.style.fontSize = (width / 7.5) + "px");
         };
-     
+
     win.addEventListener(evt, fn, false);
     doc.addEventListener("DOMContentLoaded", fn, false);
- 
+
 }(document, window));
 /*横竖屏切换刷新*/
-window.addEventListener("onorientationchange" in window ? "orientationchange" : "resize", function() {  
-	if (window.orientation === 180 || window.orientation === 0) {   
-	    location.replace(location.href);  
-	}   
-	if (window.orientation === 90 || window.orientation === -90 ){   
+window.addEventListener("onorientationchange" in window ? "orientationchange" : "resize", function() {
+	if (window.orientation === 180 || window.orientation === 0) {
 	    location.replace(location.href);
-	}    
+	}
+	if (window.orientation === 90 || window.orientation === -90 ){
+	    location.replace(location.href);
+	}
 }, false);
 
 $(function(){
@@ -51,7 +51,7 @@ function getwindowUrl() {
     }
     cutList = data;
     return data;
-}; 
+};
 
 var $ctxRoot = "http://weixin.izhongpei.com/wx";
 
@@ -90,7 +90,7 @@ function infoAjax(){
                 // if(data.actPromoCode != ''){
                     $(".Personal .codeBox").text("交易码："+data.actPromoCode);
                 // }
-                
+
                 if(data.state == 0){
                     alert("资料未完善！")
                     window.location.href="online_fix.html?memberMobile="+data.mobile+"&memberId="+data.memberId
@@ -104,19 +104,6 @@ function infoAjax(){
         }
     });
 }
-
-$.get($ctxRoot+"/act/cart/list?type=1",function(data){
-    if (data.repCode == 1) {
-        if(data.totalNum>99){
-            $(".index .index-nav .shopcar-btn i em").text("99+");
-        }else if(data.totalNum == ""){
-            $(".index .index-nav .shopcar-btn i em").text("0");
-        }else{
-            $(".index .index-nav .shopcar-btn i em").text(data.totalNum);
-        }
-        
-    }
-})
 
 /*格式化日期时间*/
 function formatTime(str){
