@@ -82,7 +82,7 @@
         <span style="width:.3rem">￥</span><span class="orderPrice">200.00</span>
       </p>
     </div>
-    <a class="pay" style="width:100%">返回</a>
+    <a class="pay closeBtn" style="width:100%">返回</a>
     <div style="text-align:center; display:none;">
       <p style="display:inline-block;">
     		<a class="pay">在线支付</a>

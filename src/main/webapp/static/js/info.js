@@ -1,28 +1,27 @@
-
-$(".userTypeBox ul li").on("click" , function(){
+$(".userTypeBox ul li").on("click", function () {
     $(this).addClass("active").siblings().removeClass("active");
 })
 
-$(".comInfoBox .checked-addr span i").on("click" , function(){
+$(".comInfoBox .checked-addr span i").on("click", function () {
     $(this).addClass("active");
     $(this).parent().siblings().find("i").removeClass("active");
 })
 
-$(".comInfoBox .checked-addr span:last i").on("click" , function(){
+$(".comInfoBox .checked-addr span:last i").on("click", function () {
     $(".comInfoBox .addrBox").fadeIn();
 })
-$(".comInfoBox .checked-addr span:first i").on("click" , function(){
+$(".comInfoBox .checked-addr span:first i").on("click", function () {
     $(".comInfoBox .addrBox").fadeOut();
 })
 
-$(function(){
+$(function () {
     getwindowUrl();
     $(".userNameBox .mobile").val(cutList.memberMobile);
 })
 
 
 // 完善信息提交$ctxRoot+ /mall/user/perfect
-function perfectAjax(type){
+function perfectAjax(type) {
     getwindowUrl()
     var userName = $(".userNameBox .userName").val();
     var mobile = $(".userNameBox .mobile").val();
@@ -32,8 +31,8 @@ function perfectAjax(type){
     var p_c_a = $("#sel_city").val();
     var openId = $("#openId").val();
     var plist = p_c_a.split(" ");
-    if(plist.length==2) {
-      plist.push("");
+    if (plist.length == 2) {
+        plist.push("");
     }
     var detailAddress = $(".comInfoBox .detailAddress textarea").val();
     /*var scr_1 = $("#filImg_1 img").attr("src");
@@ -43,38 +42,38 @@ function perfectAjax(type){
     var licenceSuffix = scr_1.substring(scr_1.indexOf("/")+1,scr_1.indexOf(";"));
     var doorSuffix = scr_2.substring(scr_2.indexOf("/")+1,scr_2.indexOf(";")); */
 
-    if(userName == "" || mobile =="" || sn == "" || detailAddress == ""){
+    if (userName == "" || mobile == "" || sn == "" || detailAddress == "") {
         alert("请填写完整信息！");
-    }else{
+    } else {
 
-       var info = {
-           openId: openId,
-           mobile: mobile,
-           linkName: userName,
-           machineType: type,
-           snCode: sn,
-           description: memo,
-           province: plist[0],
-           city: plist[1],
-           area: plist[2],
-           address: detailAddress,
-       };
+        var info = {
+            openId: openId,
+            mobile: mobile,
+            linkName: userName,
+            machineType: type,
+            snCode: sn,
+            description: memo,
+            province: plist[0],
+            city: plist[1],
+            area: plist[2],
+            address: detailAddress,
+        };
 
-       console.log(info);
+        console.log(info);
 
         $(".spinnerBox").fadeIn();
         $.ajax({
             //url: "http://localhost:8081",
             url: "http://genvict.ngrok.xiaomiqiu.cn/genvict/onlineRepairSaveBackCallController.action",
             type: "POST",
-            data:{"json": JSON.stringify(info)},
+            data: {"json": JSON.stringify(info)},
             success: function (data) {
-                if(data.RESPONSETYPE == "SUCCESS"){
+                if (data.RESPONSETYPE == "SUCCESS") {
                     $(".spinnerBox").fadeOut();
                     alert("提交成功！");
-					wx.closeWindow();
+                    wx.closeWindow();
                     //window.location.href = "login.html"
-                }else{
+                } else {
                     alert(data.RESPONSEMESSAGE);
                     $(".spinnerBox").fadeOut();
                 }
@@ -84,27 +83,30 @@ function perfectAjax(type){
 }
 
 function infoLoad() {
-  orderId=getwindowUrl().orderId;
-  $.get("http://192.168.3.15:8081/genvict/findOrderBackCallController.action",
-  {orderId:orderId}, function(info){
-    console.log(info);
-    if ("SUCCESS" == info.RESPONSETYPE) {
-      info = info.RESPONSEMESSAGE;
-      $(".userInfo .linkName").text(info.linkName);
-      $(".userInfo .mobile").text(info.mobile);
-      $(".userInfo .machineType").text(info.machineType);
-      $(".userInfo .shelfLife").text(info.shelfLife == "Y" ? "是" : "否 ");
-      $(".userInfo .snCode").text(info.snCode);
-      $(".userInfo .description").text(info.description);
-      $(".userInfo .pca").text(info.province + " " + info.city + " " + info.area);
-      $(".userInfo .address").text(info.address);
-      $(".userInfo .orderNum").text(info.orderNum);
-      $(".userInfo .orderPrice").text(info.orderPrice);
-    }
-  });
+    orderId = getwindowUrl().orderId;
+    $.get("http://192.168.3.15:8081/genvict/findOrderBackCallController.action",
+        {orderId: orderId}, function (info) {
+            console.log(info);
+            if ("SUCCESS" == info.RESPONSETYPE) {
+                info = info.RESPONSEMESSAGE;
+                $(".userInfo .linkName").text(info.linkName);
+                $(".userInfo .mobile").text(info.mobile);
+                $(".userInfo .machineType").text(info.machineType);
+                $(".userInfo .shelfLife").text(info.shelfLife == "Y" ? "是" : "否 ");
+                $(".userInfo .snCode").text(info.snCode);
+                $(".userInfo .description").text(info.description);
+                $(".userInfo .pca").text(info.province + " " + info.city + " " + info.area);
+                $(".userInfo .address").text(info.address);
+                $(".userInfo .orderNum").text(info.orderNum);
+                $(".userInfo .orderPrice").text(info.orderPrice);
+            }
+        });
 }
 
+$(".closeBtn").on("touchstart", function () {
+    wx.closeWindow();
+})
 
-$(".submitAudit").on("touchstart" , function(){
+$(".submitAudit").on("touchstart", function () {
     perfectAjax(0)
 })
