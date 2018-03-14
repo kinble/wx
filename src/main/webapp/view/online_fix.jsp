@@ -1,10 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ include file="jssdk.jsp"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + path;
 %>
 <!doctype html>
+
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.1.0.js"></script>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -61,6 +65,7 @@
 				<input type="hidden" name="firstLayer" id="firstLayer" value="" />
 				<input type="hidden" name="secondLayer" id="secondLayer" value="" />
 				<input type="hidden" name="thirdLayer" id="thirdLayer" value="" />
+				<input type="hidden" name="openId" id="openId" value="<%= request.getSession().getAttribute("openId")%>" />
 			</p>
 			<p class="detailAddress clearfix">
 				<span>详细街道地址</span>
@@ -130,5 +135,18 @@
 //		}
 //	});
 </script>
+	<script type="text/javascript">
+        if("null" != "<%= request.getSession().getAttribute("link_name")%>"){
+            $(".userNameBox .userName").val("<%= request.getSession().getAttribute("link_name")%>");
+            $(".userNameBox .mobile").val("<%= request.getSession().getAttribute("mobile")%>");
+            $(".comInfoBox .detailAddress textarea").val("<%= request.getSession().getAttribute("address")%>");
+		}
+		if("null" != "<%= request.getSession().getAttribute("province")%>"){
+			$(".sel_city").val("<%= request.getSession().getAttribute("province")%>"+" "+
+                "<%= request.getSession().getAttribute("city")%>"+" "+
+                "<%= request.getSession().getAttribute("area")%>");
+		}
+	</script>
+
 </body>
 </html>

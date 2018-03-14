@@ -1,10 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ include file="jssdk.jsp"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + path;
-	String opend=request.getAttribute("opend")+"";
+	String openId=request.getSession().getAttribute("openId")+"";
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -12,42 +13,42 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport"
 	content="width=device-width,initial-scale=1,user-scalable=0">
-<title>Javen微信开发指南</title>
+<title>在线支付</title>
 <link rel="stylesheet" href="<%=path%>/static/weui/lib/weui.css" />
 <link rel="stylesheet" href="<%=path %>/static/weui/css/jquery-weui.css"/>
 <link rel="stylesheet" href="<%=path%>/css/index.css" />
 </head>
 <body>
-	<div class="container js_container"></div>
-	<div class="page">
+	<%--<div class="container js_container"></div>--%>
+	<%--<div class="page">--%>
 
-		<div class="hd">
+		<%--<div class="hd">--%>
 
-			<h1 class="page_title">
-				<img alt="" width="80px" height="80px"
-					src="<%=path%>/images/logo.png">
-			</h1>
-			<p class="page_desc">Javen极速开发微信公众号</p>
-		</div>
+			<%--<h1 class="page_title">--%>
+				<%--<img alt="" width="80px" height="80px"--%>
+					<%--src="<%=path%>/images/logo.png">--%>
+			<%--</h1>--%>
+			<%--<p class="page_desc">Javen极速开发微信公众号<%=openId%></p>--%>
+		<%--</div>--%>
 
-		<div class="bd">
-			<div class="weui_cells_title">微信支付</div>
-			<div class="weui_cells">
-				<div class="weui_cell">
-					<div class="weui_cell_hd">
-						<label class="weui_label">金额(￥)</label>
-					</div>
-					<div class="weui_cell_bd weui_cell_primary">
-						<input class="weui_input" type="number" id="count" placeholder="请输入数字金额,单位元">
-					</div>
-				</div>
-				<div class="weui_btn_area">
-					<input type="button"  onclick="wxpay();" class="weui_btn weui_btn_primary"   value="提交"/>
-				</div>
-			</div>
-		</div>
+		<%--<div class="bd">--%>
+			<%--<div class="weui_cells_title">微信支付</div>--%>
+			<%--<div class="weui_cells">--%>
+				<%--<div class="weui_cell">--%>
+					<%--<div class="weui_cell_hd">--%>
+						<%--<label class="weui_label">金额(￥)</label>--%>
+					<%--</div>--%>
+					<%--<div class="weui_cell_bd weui_cell_primary">--%>
+						<%--<input class="weui_input" type="number" id="count" placeholder="请输入数字金额,单位元">--%>
+					<%--</div>--%>
+				<%--</div>--%>
+				<%--<div class="weui_btn_area">--%>
+					<%--<input type="button"  onclick="wxpay();" class="weui_btn weui_btn_primary"   value="提交"/>--%>
+				<%--</div>--%>
+			<%--</div>--%>
+		<%--</div>--%>
 
-	</div>
+	<%--</div>--%>
 	<script type="text/javascript" src="<%=path %>/static/weui/lib/jquery-2.1.4.js"></script>
 	<script type='text/javascript' src="<%=path %>/static/weui/js/jquery-weui.js"></script>
 	<!-- layer -->
@@ -58,18 +59,18 @@
 	function wxpay(){
 		$.showLoading("正在加载...");
 		//测试时修改为自己的openId 如果不修改会出现【下单账号与支付账号不一致】的提示 这里最好授权获取
-		var openId="oLdOB1NY_i_eRbTvPsDQH_iirgMc";
+		var openId="<%=openId%>";
 		var total_fee=$("#count").val();
-		$.post("<%=path %>/pay",
+		$.post("<%=path %>/pay/gpay",
 		    {
-		      openId:openId,
-		      total_fee:total_fee,
+                orderId:'<%=request.getParameter("orderId")%>'
 		    },
 		    function(res){
+
 		    	$.hideLoading();
 		    	if (res.code == 0) {
 		    		var data=$.parseJSON(res.data);
-		    		
+		    		alert("123213"+WeixinJSBridge);
 		    		if (typeof WeixinJSBridge == "undefined"){
 		    			if( document.addEventListener ){
 		    				document.addEventListener('WeixinJSBridgeReady', onBridgeReady(data), false);
@@ -88,20 +89,20 @@
 		    		}
 		    	}
 		    }); 
-		
 	}
 
 	function onBridgeReady(json){
+        alert(JSON.stringify(json));
 		WeixinJSBridge.invoke(
 			'getBrandWCPayRequest', 
 			json,
 			function(res){
+                alert(JSON.stringify(res));
 				// 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
 				if(res.err_msg == "get_brand_wcpay_request:ok" ) {
 					layer.msg("支付成功", {shift: 6});
-					
-					self.location="<%=path %>/course/getOrderCourseById?id=${course.id }+&openId=${openId} ";
-					
+                    wx.closeWindow();
+					//self.location="<%=path %>/course/getOrderCourseById?id=${course.id }+&openId=${openId} ";
 				}else{
 					layer.msg("支付失败", {shift: 6});
 				}
@@ -120,41 +121,51 @@
         imgUrl: '<%=basePath%>/images/logo.png'
 		} : shareData;
 
-		wx.config({
-			debug: true,
-			appId : '${appId}',
-			timestamp : '${timestamp}',
-			nonceStr : '${nonceStr }',
-			signature : '${signature}',
-			jsApiList : [ 'onMenuShareTimeline', 'onMenuShareAppMessage',
-					'onMenuShareQQ', ]
-		});
-		wx.ready(function() {
-			/* 发送给朋友 */
-			wx.onMenuShareAppMessage({
-				 	title: 'Javen微信开发',
-			        desc: '极速开发微信公众号',
-			        link: '<%=basePath%>/toOauth',
-			        imgUrl: '<%=basePath%>/images/logo.png',
-			      trigger: function (res) {
-			        alert('用户点击发送给朋友');
-			      },
-			      success: function (res) {
-			        alert('已分享');
-			        addjifen(1);
-			      },
-			      cancel: function (res) {
-			        alert('已取消');
-			      },
-			      fail: function (res) {
-			        alert(JSON.stringify(res));
-			      }
-			    });
-			/* 分享到朋友圈 */
-			wx.onMenuShareTimeline(shareData);
-			/* 分享到QQ */
-			wx.onMenuShareQQ(shareData);
-		});
+//    wx.config({
+//        debug: true,
+//        appId : 'wx0d2ac06517e90e2a',
+//        timestamp : '1520754814',
+//        nonceStr : '3584d520-9339-4929-a6f5-dce9a988dfb9',
+//        signature : 'e3790cfa78c944af1ac6df5e2b701b046d381b2a',
+//        jsApiList : [ 'onMenuShareTimeline', 'onMenuShareAppMessage',
+//            'closeWindow', ]
+//    });
+    <%----%>
+		<%--wx.config({--%>
+			<%--debug: true,--%>
+			<%--appId : '${appId}',--%>
+			<%--timestamp : '${timestamp}',--%>
+			<%--nonceStr : '${nonceStr }',--%>
+			<%--signature : '${signature}',--%>
+			<%--jsApiList : [ 'onMenuShareTimeline', 'onMenuShareAppMessage',--%>
+					<%--'closeWindow', ]--%>
+		<%--});--%>
+		<%--wx.ready(function() {--%>
+			<%--/* 发送给朋友 */--%>
+			<%--wx.onMenuShareAppMessage({--%>
+				 	<%--title: 'Javen微信开发',--%>
+			        <%--desc: '极速开发微信公众号',--%>
+			        <%--link: '<%=basePath%>/toOauth',--%>
+			        <%--imgUrl: '<%=basePath%>/images/logo.png',--%>
+			      <%--trigger: function (res) {--%>
+			        <%--alert('用户点击发送给朋友');--%>
+			      <%--},--%>
+			      <%--success: function (res) {--%>
+			        <%--alert('已分享');--%>
+			        <%--addjifen(1);--%>
+			      <%--},--%>
+			      <%--cancel: function (res) {--%>
+			        <%--alert('已取消');--%>
+			      <%--},--%>
+			      <%--fail: function (res) {--%>
+			        <%--alert(JSON.stringify(res));--%>
+			      <%--}--%>
+			    <%--});--%>
+			<%--/* 分享到朋友圈 */--%>
+			<%--wx.onMenuShareTimeline(shareData);--%>
+			<%--/* 分享到QQ */--%>
+			<%--wx.onMenuShareQQ(shareData);--%>
+		<%--});--%>
 		
 		
 		
@@ -175,7 +186,6 @@
 			    }); 
 			
 		}
-		alert("<%=opend%>")
 	</script>
 </body>
 </html>

@@ -30,6 +30,7 @@ function perfectAjax(type){
     var sn = $(".comInfoBox .sn").val();
     var memo = $(".comInfoBox .memo").val();
     var p_c_a = $("#sel_city").val();
+    var openId = $("#openId").val();
     var plist = p_c_a.split(" ");
     if(plist.length==2) {
       plist.push("");
@@ -45,8 +46,9 @@ function perfectAjax(type){
     if(userName == "" || mobile =="" || sn == "" || detailAddress == ""){
         alert("请填写完整信息！");
     }else{
+
        var info = {
-           openId: "oLdOB1NY_i_eRbTvPsDQH_iirgMc",
+           openId: openId,
            mobile: mobile,
            linkName: userName,
            machineType: type,
@@ -63,13 +65,14 @@ function perfectAjax(type){
         $(".spinnerBox").fadeIn();
         $.ajax({
             //url: "http://localhost:8081",
-            url: "http://192.168.3.15:8081/genvict/onlineRepairSaveBackCallController.action",
+            url: "http://genvict.ngrok.xiaomiqiu.cn/genvict/onlineRepairSaveBackCallController.action",
             type: "POST",
             data:{"json": JSON.stringify(info)},
             success: function (data) {
                 if(data.RESPONSETYPE == "SUCCESS"){
                     $(".spinnerBox").fadeOut();
                     alert("提交成功！");
+					wx.closeWindow();
                     //window.location.href = "login.html"
                 }else{
                     alert(data.RESPONSEMESSAGE);
