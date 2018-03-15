@@ -10,7 +10,13 @@
     <%@ include file="jssdk.jsp"%>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0, user-scalable=no">
-    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <!-- HTTP 1.1 -->
+    <meta http-equiv="pragma" content="no-cache">
+    <!-- HTTP 1.0 -->
+    <meta http-equiv="cache-control" content="no-cache">
+    <!-- Prevent caching at the proxy server -->
+    <meta http-equiv="expires" content="0">
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta content="telephone=no" name="format-detection" />
     <link rel="stylesheet" type="text/css" href="/static/css/reset.css">
@@ -138,7 +144,7 @@
             $(".comInfoBox .detailAddress textarea").val("<%= request.getSession().getAttribute("address")%>");
 		}
 		if("null" != "<%= request.getSession().getAttribute("province")%>"){
-			$(".sel_city").val("<%= request.getSession().getAttribute("province")%>"+" "+
+			$("#sel_city").val("<%= request.getSession().getAttribute("province")%>"+" "+
                 "<%= request.getSession().getAttribute("city")%>"+" "+
                 "<%= request.getSession().getAttribute("area")%>");
 		}
