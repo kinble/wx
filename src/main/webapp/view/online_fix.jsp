@@ -45,11 +45,25 @@
       <p><span>设备信息</span></p>
     </div>
     <div class="comInfoBox">
-			<p class="comName clearfix"><span>设备类型</span>
-        <select class="machineType" class="text" style="-webkit-appearance:none;appearance:none;border:none;padding:0px 10px;display:block;-webkit-box-sizing:border-box;box-sizing:border-box;background-color: #FFFFFF;color:#333333;border-radius:4px;">
-            <option value="ETC">--电子标签--</option>
-            <option value="UNITOLL_ETC">--非电子标签--</option>
-        </select>
+			<p class="comName clearfix">
+                <c:choose>
+                <c:when test="${param.type == '1'}">
+                <span>设备类型</span>
+                <select class="machineType" class="text" style="-webkit-appearance:none;appearance:none;border:none;padding:0px 10px;display:block;-webkit-box-sizing:border-box;box-sizing:border-box;background-color: #FFFFFF;color:#333333;border-radius:4px;">
+                    <option value="ETC">--电子标签--</option>
+                    <option value="UNITOLL_ETC">--非电子标签--</option>
+                </select>
+                </c:when>
+                <c:otherwise>
+                    <span>服务类型</span>
+                    <select class="machineType" class="text" style="-webkit-appearance:none;appearance:none;border:none;padding:0px 10px;display:block;-webkit-box-sizing:border-box;box-sizing:border-box;background-color: #FFFFFF;color:#333333;border-radius:4px;">
+                        <option value="MACHINE_REPLACE">--设备更换--</option>
+                        <option value="MACHINE_BUY">--配件更换/购买--</option
+                        <option value="REMOTE_SERVICE">--远程支持服务--</option>
+                        <option value="ONLINE_SERVICE">--现场服务--</option>
+                    </select>
+                </c:otherwise>
+                </c:choose>
 			</p>
 			<p class="comName clearfix"><span>SN号</span>
 				<textarea class="sn" placeholder="输入SN号,多个请用逗号隔开"></textarea>
@@ -95,7 +109,7 @@
 				<!--</li>-->
 			<!--</ul>-->
 		<!--</div>-->
-		<a class="submitAudit">提交</a>
+		<a class="submitAudit" type="${param.type == '1' ? 1 : 0}">提交</a>
 	</div>
 	<!-- <div class="index">
 		<div class="index-nav">

@@ -40,7 +40,7 @@
         </p>
         <p>
             <span>手机号</span>
-            <span class="mobile">13888888888</span>
+            <span class="mobile"></span>
         </p>
     </div>
     <div class="comInfoBox comTitle clearfix">
@@ -49,17 +49,17 @@
     <div class="comInfoBox comInfo clearfix">
         <p>
             <span>设备类型</span>
-            <span class="machineType">电子标签</span>
+            <span class="machineType"></span>
         </p>
         <p>
             <span>是否过保</span>
-            <span class="shelfLife">否</span>
+            <span class="shelfLife"></span>
         </p>
         <p><span>SN号</span>
-            <span class="snCode">电子标签</span>
+            <span class="snCode"></span>
         </p>
         <p><span>不良现象</span>
-            <span class="description">输入不良现象</span>
+            <span class="description"></span>
         </p>
     </div>
     <div class="comInfoBox comTitle clearfix">
@@ -68,11 +68,11 @@
     <div class="comInfoBox comInfo clearfix">
         <p>
             <span>所在地</span>
-            <span class="pca">fdsafdsafs</span>
+            <span class="pca"></span>
         </p>
         <p>
             <span>详细地址</span>
-            <span class="address">输入详细地址</span>
+            <span class="address"></span>
         </p>
     </div>
     <div class="comInfoBox comTitle clearfix">
@@ -81,11 +81,15 @@
     <div class="comInfoBox comInfo clearfix">
         <p>
             <span>订单号</span>
-            <span class="orderNum">11111111</span>
+            <span class="orderNum"></span>
         </p>
         <p>
             <span>订单金额</span>
-            <span style="width:.3rem">￥</span><span class="orderPrice">200.00</span>
+            <span style="width:.3rem">￥</span><span class="orderPrice"></span>
+        </p>
+        <p>
+            <span>支付状态</span>
+            <span class="payStatus"></span>
         </p>
     </div>
 <c:if test="${param.needInvoice == '1'}">
@@ -159,15 +163,15 @@
     </div>
 </div> -->
 <script src="/static/dist/jquery.min.js"></script>
-<script src="/static/js/common.js"></script>
-<!--<script src="dist/jquery.uploadView.js"></script>-->
+<script src="/static/weui/js/jquery-weui.js"></script>
 <script src="/static/weui/lib/fastclick.js"></script>
 <script>
     $(function() {
         FastClick.attach(document.body);
     });
 </script>
-<script src="/static/weui/js/jquery-weui.js"></script>
+<script src="/static/js/common.js"></script>
+<!--<script src="dist/jquery.uploadView.js"></script>-->
 <script src="/static/js/info.js"></script>
 <script>
     infoLoad();

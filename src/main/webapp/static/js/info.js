@@ -14,11 +14,18 @@ $(".comInfoBox .checked-addr span:first i").on("click", function () {
     $(".comInfoBox .addrBox").fadeOut();
 })
 
-var actiionType = ["REPAIR_CREATE", "REPAIR_UPDATE"];
+//
+var serverApi = "http://genvict.ngrok.xiaomiqiu.cn/genvict/";
+
+//0-创建订单，1-修改订单
+var actionTypeCfg = ["REPAIR_CREATE", "REPAIR_UPDATE"];
+
+//0-在线报障，1-在线报修
+var fixTypeCfg = ["onlineBugSaveBackCallController.action", "onlineRepairSaveBackCallController.action"];
 
 // 完善信息提交$ctxRoot+ /mall/user/perfect
-function perfectAjax(type) {
-    if (type == 0) {
+function perfectAjax(fixType,  actionType) {
+    if (actionType == 0) {
         var userName = $(".userNameBox .userName").val();
         var mobile = $(".userNameBox .mobile").val();
         var machineType = $(".comInfoBox .machineType").val();
@@ -57,7 +64,7 @@ function perfectAjax(type) {
     var doorBit = scr_2.split(",")[1];
     var licenceSuffix = scr_1.substring(scr_1.indexOf("/")+1,scr_1.indexOf(";"));
     var doorSuffix = scr_2.substring(scr_2.indexOf("/")+1,scr_2.indexOf(";")); */
-    if (type == 1) {
+    if (actionType == 1) {
         var info = {
             "id": $(".userInfo .orderId").val(),
             "fpType": $(".invoiceInfo .selInvType").val(),
@@ -86,7 +93,7 @@ function perfectAjax(type) {
         $(".spinnerBox").fadeIn();
         $.ajax({
             //url: "http://localhost:8081",
-            url: "http://genvict.ngrok.xiaomiqiu.cn/genvict/onlineRepairSaveBackCallController.action?ifaceNum=" + actiionType[type],
+            url: serverApi + fixTypeCfg[fixType] + "?ifaceNum=" + actionTypeCfg[actionType],
             type: "POST",
             data: {"json": JSON.stringify(info)},
             success: function (data) {
@@ -104,8 +111,45 @@ function perfectAjax(type) {
             }
         });
     }, function() {
-        return;
+        return false;
     });
+}
+
+function infoLoad() {
+    var paramData = getwindowUrl();
+    orderId = paramData.orderId;
+    needInvoice = paramData.needInvoice;
+    $.get(serverApi + "findOrderBackCallController.action",
+        {orderId: orderId}, function (info) {
+            if ("SUCCESS" === info.RESPONSETYPE) {
+                info = info.RESPONSEMESSAGE;
+                $(".userInfo .linkName").text(info.linkName);
+                $(".userInfo .mobile").text(info.mobile);
+                $(".userInfo .machineType").text(info.machineType);
+                $(".userInfo .shelfLife").text(info.shelfLife === "Y" ? "是" : "否 ");
+                $(".userInfo .snCode").text(info.snCode);
+                $(".userInfo .description").text(info.description);
+                $(".userInfo .pca").text(info.province + " " + info.city + " " + info.area);
+                $(".userInfo .address").text(info.address);
+                $(".userInfo .orderNum").text(info.orderNum);
+                $(".userInfo .orderPrice").text(info.orderPrice);
+                $(".userInfo .payStatus").text(info.payStatus === "1" ? "已支付" : "未支付");
+                $(".userInfo .orderId").val(info.id);
+
+                if (needInvoice === "1") {
+                    $(".invoiceInfo .selInvType").val(info.fpType);
+                    $(".invoiceInfo .invName").val(info.invoiceName);
+                    $(".invoiceInfo .invCode").val(info.invoiceCode);
+                    $(".invoiceInfo .invAdress").val(info.invoiceAddress);
+                    $(".invoiceInfo .invBanck").val(info.invoiceBank);
+                    $(".invoiceInfo .invBanckNo").val(info.invoiceBankno);
+                    $(".invoiceInfo .invMobile").val(info.invoiceMobile);
+                    if(info.fpType === "VAT") {
+                        $(".invoiceInfo .selInvType").change();
+                    }
+                }
+            }
+        });
 }
 
 $(".closeBtn").on("touchstart", function () {
@@ -113,7 +157,7 @@ $(".closeBtn").on("touchstart", function () {
 })
 
 $(".submitBtn").on("touchstart", function () {
-    perfectAjax(1);
+    perfectAjax(0, 1);
 })
 
 $(".selInvType").on("change", function () {
@@ -134,41 +178,6 @@ $(".invoiceBtn").on("touchstart", function () {
 })
 
 $(".submitAudit").on("touchstart", function () {
-    perfectAjax(0);
+    var type = $(this).attr("type");
+    perfectAjax(type, 0);
 })
-
-function infoLoad() {
-    var paramData = getwindowUrl();
-    orderId = paramData.orderId;
-    needInvoice = paramData.needInvoice;
-    $.get("http://genvict.ngrok.xiaomiqiu.cn/genvict/findOrderBackCallController.action",
-        {orderId: orderId}, function (info) {
-            if ("SUCCESS" === info.RESPONSETYPE) {
-                info = info.RESPONSEMESSAGE;
-                $(".userInfo .linkName").text(info.linkName);
-                $(".userInfo .mobile").text(info.mobile);
-                $(".userInfo .machineType").text(info.machineType);
-                $(".userInfo .shelfLife").text(info.shelfLife === "Y" ? "是" : "否 ");
-                $(".userInfo .snCode").text(info.snCode);
-                $(".userInfo .description").text(info.description);
-                $(".userInfo .pca").text(info.province + " " + info.city + " " + info.area);
-                $(".userInfo .address").text(info.address);
-                $(".userInfo .orderNum").text(info.orderNum);
-                $(".userInfo .orderPrice").text(info.orderPrice);
-                $(".userInfo .orderId").val(info.id);
-
-                if (needInvoice === "1") {
-                    $(".invoiceInfo .selInvType").val(info.fpType);
-                    $(".invoiceInfo .invName").val(info.invoiceName);
-                    $(".invoiceInfo .invCode").val(info.invoiceCode);
-                    $(".invoiceInfo .invAdress").val(info.invoiceAddress);
-                    $(".invoiceInfo .invBanck").val(info.invoiceBank);
-                    $(".invoiceInfo .invBanckNo").val(info.invoiceBankno);
-                    $(".invoiceInfo .invMobile").val(info.invoiceMobile);
-                     if(info.fpType === "VAT") {
-                         $(".invoiceInfo .selInvType").change();
-                     }
-                }
-            }
-        });
-}
