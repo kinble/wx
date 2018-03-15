@@ -126,14 +126,14 @@ function infoLoad() {
                 $(".userInfo .linkName").text(info.linkName);
                 $(".userInfo .mobile").text(info.mobile);
                 $(".userInfo .machineType").text(info.machineType);
-                $(".userInfo .shelfLife").text(info.shelfLife === "Y" ? "是" : "否 ");
+                $(".userInfo .shelfLife").text(info.shelfLife == "Y" ? "是" : "否 ");
                 $(".userInfo .snCode").text(info.snCode);
                 $(".userInfo .description").text(info.description);
                 $(".userInfo .pca").text(info.province + " " + info.city + " " + info.area);
                 $(".userInfo .address").text(info.address);
                 $(".userInfo .orderNum").text(info.orderNum);
                 $(".userInfo .orderPrice").text(info.orderPrice);
-                $(".userInfo .payStatus").text(info.payStatus === "1" ? "已支付" : "未支付");
+                $(".userInfo .payStatus").text(info.payStatus == "1" ? "已支付" : "未支付");
                 $(".userInfo .orderId").val(info.id);
 
                 if (needInvoice === "1") {
