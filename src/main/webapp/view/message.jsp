@@ -57,15 +57,12 @@ String openId = request.getSession().getAttribute("openId")+"";
           <input class="weui_input mobile" type="tel" placeholder="请输入手机号">
         </div>
       </div>
-    </div>
-    <div class="weui_cells_title">留言内容</div>
-    <div class="weui_cells weui_cells_form">
-      <div class="weui_cell">
-        <div class="weui_cell_bd weui_cell_primary">
-          <textarea class="weui_textarea context" placeholder="请输入留言内容" rows="7"></textarea>
-          <div class="weui_textarea_counter"><span>0</span>/200</div>
+        <div class="weui_cell">
+          <div class="weui_cell_bd weui_cell_primary">
+            <textarea class="weui_textarea context" placeholder="请输入留言内容" rows="7" onpropertychange="LimitTextArea(this)" oninput="LimitTextArea(this)"></textarea>
+            <div class="weui_textarea_counter"><span id="limit_span">0</span>/200</div>
+          </div>
         </div>
-      </div>
     </div>
     <a href="javascript:;" class="weui_btn weui_btn_primary submitAudit">提交</a>
   </body>
@@ -120,6 +117,16 @@ String openId = request.getSession().getAttribute("openId")+"";
           }
           $(".spinnerBox").fadeOut(1000);
       })
+
+
+      function LimitTextArea(field) {
+          maxlimit = 200;
+          if (field.value.length > maxlimit) {
+              field.value = field.value.substring(0, maxlimit);
+              alert("字数不得多于200！");
+          }
+          document.getElementById("limit_span").innerHTML=field.value.length;
+      }
 
   </script>
 

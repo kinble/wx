@@ -20,7 +20,6 @@ String openId = request.getSession().getAttribute("openId")+"";
   <script type='text/javascript' src="<%=path %>/static/weui/js/jquery-weui.js"></script>
   <link rel="stylesheet" href="<%=path %>/static/weui/lib/weui.min.css">
   <link rel="stylesheet" href="<%=path %>/static/weui/css/jquery-weui.css">
-  <link rel="stylesheet" href="<%=path %>/static/weui/demos/css/demos.css">
   <script>
       //alert("取消成功！我们将依照回寄地址将设备寄回。感谢您使用金溢科技客户服务！");
       $(function(){

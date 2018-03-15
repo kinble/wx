@@ -49,7 +49,6 @@ function getwindowUrl() {
             data[k] = tmp_str.substring(pos+1)
         }
     }
-    cutList = data;
     return data;
 };
 
