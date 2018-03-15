@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ include file="jssdk.jsp" %>
 <%
     String path = request.getContextPath();
     String basePath = request.getScheme() + "://" + request.getServerName() + path;
@@ -8,16 +7,18 @@
 <!doctype html>
 <html lang="en">
 <head>
+    <%@ include file="jssdk.jsp" %>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="Cache-Control" content="no-siteapp">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta content="telephone=no" name="format-detection"/>
+
+    <link rel="stylesheet" href="/static/weui/lib/weui.min.css">
+    <link rel="stylesheet" href="/static/weui/css/jquery-weui.css">
     <link rel="stylesheet" type="text/css" href="/static/css/reset.css">
     <link rel="stylesheet" type="text/css" href="/static/css/main.css">
     <title>订单详情</title>
-
 </head>
 <body>
 <div class="spinnerBox">
@@ -28,6 +29,7 @@
     </div>
 </div>
 <div class="userInfo">
+    <input type="hidden" class="orderId" value="" />
     <div class="comInfoBox comInfo clearfix">
         <p>
             <span>联系人</span>
@@ -83,6 +85,7 @@
             <span style="width:.3rem">￥</span><span class="orderPrice">200.00</span>
         </p>
     </div>
+<c:if test="${param.needInvoice == '1'}">
     <div class="invoiceInfo">
         <div class="comInfoBox comTitle clearfix">
             <p><span>开票信息</span></p>
@@ -93,8 +96,8 @@
                 <span class="invType">
                     <select class="selInvType" class="text"
                             style="-webkit-appearance:none;appearance:none;border:none;padding:0px 10px;display:block;-webkit-box-sizing:border-box;box-sizing:border-box;background-color: #FFFFFF;color:#333333;border-radius:4px;">
-            <option value="VAT">--普通发票--</option>
-            <option value="PLAIN">--增值税专用发票--</option>
+            <option value="PLAIN">--普通发票--</option>
+            <option value="VAT">--增值税专用发票--</option>
         </select>
                 </span>
             </p>
@@ -127,8 +130,15 @@
         </div>
     </div>
     <a class="invoiceBtn">不开票</a>
-    <a class="pay submitBtn" style="float:none;">提交</a>
-    <a class="pay" style="float:none;">返回</a>
+    <div style="text-align:center; ">
+        <p style="display:inline-block;">
+            <a class="pay closeBtn">返回</a>
+            <a class="noFix submitBtn">提交</a>
+        </p>
+    </div>
+    </c:if>
+    <a class="pay closeBtn" style="float: none;
+            display: ${param.needInvoice == '1' ? 'none' : 'block'};">返回</a>
     <div style="text-align:center; display:none;">
         <p style="display:inline-block;">
             <a class="pay">在线支付</a>
@@ -148,34 +158,16 @@
 <script src="/static/dist/jquery.min.js"></script>
 <script src="/static/js/common.js"></script>
 <!--<script src="dist/jquery.uploadView.js"></script>-->
+<script src="/static/weui/lib/fastclick.js"></script>
+<script>
+    $(function() {
+        FastClick.attach(document.body);
+    });
+</script>
+<script src="/static/weui/js/jquery-weui.js"></script>
 <script src="/static/js/info.js"></script>
 <script>
     infoLoad();
-    //	$("#imgInput_1").uploadView({
-    //		uploadBox: '.js_showBox',//设置上传框容器
-    //		showBox : '#filImg_1',//设置显示预览图片的容器
-    //		width : 10, //预览图片的宽度，单位px
-    //		height : 15, //预览图片的高度，单位px
-    //		allowType: ["gif", "jpeg", "jpg", "bmp", "png"], //允许上传图片的类型
-    //		maxSize :3, //允许上传图片的最大尺寸，单位M
-    //		success:function(e){
-    //			$(".js_uploadText").text('更改');
-    //			alert($('#filImg_1 img').attr('src'))
-    //			// alert('图片上传成功');
-    //		}
-    //	});
-    //	$("#imgInput_2").uploadView({
-    //		uploadBox: '.js_showBox',//设置上传框容器
-    //		showBox : '#filImg_2',//设置显示预览图片的容器
-    //		width : 10, //预览图片的宽度，单位px
-    //		height : 15, //预览图片的高度，单位px
-    //		allowType: ["gif", "jpeg", "jpg", "bmp", "png"], //允许上传图片的类型
-    //		maxSize :2, //允许上传图片的最大尺寸，单位M
-    //		success:function(e){
-    //			// $(".js_uploadText").text('更改');
-    //			// alert('图片上传成功');
-    //		}
-    //	});
 </script>
 </body>
 </html>
