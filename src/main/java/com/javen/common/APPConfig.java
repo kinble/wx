@@ -154,6 +154,7 @@ public class APPConfig extends JFinalConfig {
 		arp.addMapping("tb_order_headers", TbOrderHeaders.class);
 		arp.addMapping("bd_pay_log", BdPayLog.class);
 		arp.addMapping("tb_message", TbMessage.class);
+		arp.addMapping("tb_wiki", TbWiki.class);
 
 		arp.setShowSql(PropKit.getBoolean("devMode", false));
 		me.add(arp);

@@ -20,10 +20,11 @@ public class TbMessage extends Model<TbMessage> {
 	
 	public static final TbMessage me = new TbMessage();
 	
-	public boolean save(String cust_id, String phone, String context, String status,
+	public boolean save(String cust_id,String cust_name, String phone, String context, String status,
 						String created_by){
 		TbMessage me = new TbMessage();
 		me.set("open_id", cust_id);
+		me.set("cust_name", cust_name);
 		me.set("phone", phone);
 		me.set("context", context);
 		me.set("status", status);

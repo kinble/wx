@@ -313,15 +313,18 @@ public class WeixinPayController extends ApiController {
 						order.update();
 					}
 				}
-				//if("广东省".equals(order.get("province"))){
-					if("ETC".equals(order.get("machine_type"))){
-						ApiResult sendText = CustomServiceApi.sendText(openId,
-								"订单"+order.get("order_num")+"支付成功！\n您送修的设备已经维修完毕，请在3个工作日后前往送修的营业厅领取设备及发票。感谢您使用金溢科技客户服务！");
-					}else{
-						ApiResult sendText = CustomServiceApi.sendText(openId,
-								"订单"+order.get("order_num")+"支付成功！待设备修好回寄时我们将另行通知。感谢您使用金溢科技客户服务！\n<a href=\"" + PropKit.get("domain") + "/view/gpay?orderId=" + order.get("id") + "\">如需开具发票点击这里</a>");
+				if("ETC".equals(order.get("machine_type"))){
+					if(!"广东省".equals(order.get("province"))) {
+						log.warn("异常!!!!非广东省电子标签的维修单进行了支付!!!");
 					}
-				//}
+					ApiResult sendText = CustomServiceApi.sendText(openId,
+							"订单<a href=\"" + PropKit.get("domain") + "/view/order_info.jsp?orderId=" + order.get("id") + "\">" + order.get("order_num") + "</a>" +
+									"支付成功！\n您送修的设备已经维修完毕，请在3个工作日后前往送修的营业厅领取设备及发票。感谢您使用金溢科技客户服务！");
+				}else{
+					ApiResult sendText = CustomServiceApi.sendText(openId,
+							"订单<a href=\"" + PropKit.get("domain") + "/view/order_info.jsp?orderId=" + order.get("id") + "\">" +order.get("order_num")+"</a>" +
+								"支付成功！待设备修好回寄时我们将另行通知。感谢您使用金溢科技客户服务！\n<a href=\"" + PropKit.get("domain") + "/view/order_info.jsp?needInvoice=1&orderId=" + order.get("id") + "\">如需开具发票点击这里</a>");
+				}
 				log.warn("更新订单信息:"+attach);
 				//发送通知等
 

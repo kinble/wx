@@ -104,10 +104,19 @@ public class WeiXinOauthController extends ApiController{
 						setSessionAttr("link_name",order.get("link_name"));
 						setSessionAttr("mobile",order.get("mobile"));
 					}
-					render("/view/online_fix.jsp");
+					render("/view/online_fix.jsp?type=1");
 					//forwardAction("/static/online_fix.html");
 				}else if (state.equals("bz"))  {//报障
-					forwardAction("/view/close.jsp");
+					TbOrderHeaders order = TbOrderHeaders.me.findOneByOpenId(openId);
+					if(null != order){
+						setSessionAttr("province",order.get("province"));
+						setSessionAttr("city",order.get("city"));
+						setSessionAttr("area",order.get("area"));
+						setSessionAttr("address",order.get("address"));
+						setSessionAttr("link_name",order.get("link_name"));
+						setSessionAttr("mobile",order.get("mobile"));
+					}
+					render("/view/online_fix.jsp?type=0");
 				}else if (state.equals("zxly"))  {
 
 					TbCustomer cust = TbCustomer.me.findByOpenId(openId);

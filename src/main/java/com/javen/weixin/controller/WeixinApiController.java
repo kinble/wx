@@ -74,9 +74,9 @@ public class WeixinApiController extends ApiController {
 				"           \"name\":\"更多服务\",\n" +
 				"           \"sub_button\":[\n" +
 				"           {    \n" +
-				"               \"type\":\"click\",\n" +
+				"               \"type\":\"view\",\n" +
 				"               \"name\":\"常见问题\",\n" +
-				"\t\t\t   \"key\":\"V1001_GDFF_CJWT\"\n" +
+				"\t\t\t   \"url\":\"http://kinble.s1.natapp.cc/view/FAQ.jsp\"\n" +
 				"            },\n" +
 				"            {\n" +
 				"               \"type\":\"click\",\n" +
