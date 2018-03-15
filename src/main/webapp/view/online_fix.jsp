@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="/static/weui/css/jquery-weui.css">
     <link rel="stylesheet" type="text/css" href="/static/css/reset.css">
     <link rel="stylesheet" type="text/css" href="/static/css/main.css">
-    <title>在线报修</title>
+    <title>在线报${param.type == "1" ? "修" : "障"}</title>
 </head>
 <body>
 	<div class="spinnerBox">
