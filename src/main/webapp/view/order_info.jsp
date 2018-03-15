@@ -5,19 +5,17 @@
     String basePath = request.getScheme() + "://" + request.getServerName() + path;
 %>
 <!doctype html>
-<html lang="en">
+<html>
 <head>
     <%@ include file="jssdk.jsp" %>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0, user-scalable=no">
-    <!-- HTTP 1.1 -->
+    <meta charset="utf-8">
     <meta http-equiv="pragma" content="no-cache">
-    <!-- HTTP 1.0 -->
     <meta http-equiv="cache-control" content="no-cache">
-    <!-- Prevent caching at the proxy server -->
     <meta http-equiv="expires" content="0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta content="telephone=no" name="format-detection"/>
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="This is my page">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
     <link rel="stylesheet" href="/static/weui/lib/weui.min.css">
     <link rel="stylesheet" href="/static/weui/css/jquery-weui.css">

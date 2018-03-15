@@ -5,7 +5,7 @@
 	String basePath = request.getScheme() + "://" + request.getServerName() + path;
 %>
 <!doctype html>
-<html lang="en">
+<html>
 <head>
     <%@ include file="jssdk.jsp"%>
     <meta charset="UTF-8">
@@ -18,6 +18,9 @@
     <meta http-equiv="expires" content="0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta content="telephone=no" name="format-detection" />
+
+    <link rel="stylesheet" href="/static/weui/lib/weui.min.css">
+    <link rel="stylesheet" href="/static/weui/css/jquery-weui.css">
     <link rel="stylesheet" type="text/css" href="/static/css/reset.css">
     <link rel="stylesheet" type="text/css" href="/static/css/main.css">
     <title>在线报修</title>
@@ -109,33 +112,14 @@
 <script src="/static/dist/city.js"></script>
  <!--<script src="dist/jquery.uploadView.js"></script>-->
 <script src="/static/js/info.js"></script>
-<script>
-//	$("#imgInput_1").uploadView({
-//		uploadBox: '.js_showBox',//设置上传框容器
-//		showBox : '#filImg_1',//设置显示预览图片的容器
-//		width : 10, //预览图片的宽度，单位px
-//		height : 15, //预览图片的高度，单位px
-//		allowType: ["gif", "jpeg", "jpg", "bmp", "png"], //允许上传图片的类型
-//		maxSize :3, //允许上传图片的最大尺寸，单位M
-//		success:function(e){
-//			$(".js_uploadText").text('更改');
-//			alert($('#filImg_1 img').attr('src'))
-//			// alert('图片上传成功');
-//		}
-//	});
-//	$("#imgInput_2").uploadView({
-//		uploadBox: '.js_showBox',//设置上传框容器
-//		showBox : '#filImg_2',//设置显示预览图片的容器
-//		width : 10, //预览图片的宽度，单位px
-//		height : 15, //预览图片的高度，单位px
-//		allowType: ["gif", "jpeg", "jpg", "bmp", "png"], //允许上传图片的类型
-//		maxSize :2, //允许上传图片的最大尺寸，单位M
-//		success:function(e){
-//			// $(".js_uploadText").text('更改');
-//			// alert('图片上传成功');
-//		}
-//	});
-</script>
+    <script src="/static/weui/lib/fastclick.js"></script>
+    <script>
+        $(function() {
+            FastClick.attach(document.body);
+        });
+    </script>
+    <script src="/static/weui/js/jquery-weui.js"></script>
+    <script src="/static/js/info.js"></script>
 	<script type="text/javascript">
         if("null" != "<%= request.getSession().getAttribute("link_name")%>"){
             $(".userNameBox .userName").val("<%= request.getSession().getAttribute("link_name")%>");

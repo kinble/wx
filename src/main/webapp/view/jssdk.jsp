@@ -3,7 +3,7 @@
 <%@ page import="com.jfinal.kit.HashKit" %>
 <%@ page import="com.jfinal.weixin.sdk.api.ApiConfigKit" %>
 <%@ page import="java.util.UUID" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
     //jssdk鉴权公用页面
     JsTicket jsApiTicket = JsTicketApi.getTicket(JsTicketApi.JsApiType.jsapi);
@@ -20,7 +20,7 @@
     String timestamp = Long.toString(System.currentTimeMillis() / 1000);
     // 这里参数的顺序要按照 key 值 ASCII 码升序排序
     //注意这里参数名必须全部小写，且必须有序
-    String str = "jsapi_ticket=" + jsapi_ticket +
+    String  str = "jsapi_ticket=" + jsapi_ticket +
             "&noncestr=" + nonce_str +
             "&timestamp=" + timestamp +
             "&url=" + url;
@@ -37,11 +37,24 @@
 //  System.out.println("nonce_str  " + nonce_str);
 
 %>
-<script type="text/javascript" src="//res.wx.qq.com/open/js/jweixin-1.3.2.js?_=20180314"></script>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="expires" content="0">
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="This is my page">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+</head>
+<body>
+</body>
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.1.0.js"></script>
 <script type="text/javascript">
     wx.config({
         debug: false,
-        appId: '<%=appId%>',
+        appId:'<%=appId%>',
         timestamp: '<%=timestamp%>',
         nonceStr: '<%=nonceStr %>',
         signature: '<%=signature%>',
@@ -84,10 +97,9 @@
     //        'chooseCard',
 
     wx.ready(function () {
-        try {
+        try{
             wxpay();
-        } catch (e) {
-        }
+        }catch (e){}
     });
 
     wx.error(function (res) {
@@ -95,3 +107,4 @@
     });
 
 </script>
+</html>
