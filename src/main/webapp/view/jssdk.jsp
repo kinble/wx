@@ -50,7 +50,7 @@
 </head>
 <body>
 </body>
-<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.1.0.js"></script>
+<script type="text/javascript" src="//res.wx.qq.com/open/js/jweixin-1.3.2.js?_=20180314"></script>
 <script type="text/javascript">
     wx.config({
         debug: false,
