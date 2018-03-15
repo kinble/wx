@@ -16,7 +16,6 @@
     <meta http-equiv="cache-control" content="no-cache">
     <!-- Prevent caching at the proxy server -->
     <meta http-equiv="expires" content="0">
-    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta content="telephone=no" name="format-detection" />
     <link rel="stylesheet" type="text/css" href="/static/css/reset.css">
