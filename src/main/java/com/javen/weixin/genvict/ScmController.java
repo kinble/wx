@@ -118,7 +118,7 @@ public class ScmController extends MsgControllerAdapter {
                 }else{
                     msg="您好!报障信息已经提交成功."+
                             "\n订单编号为:<a href=\"" + PropKit.get("domain") + "/view/order_info.jsp?orderId=" + order.get("id") + "\">" +order.get("order_num")+"</a>";
-                    msg+="\n请留意通讯号码,我们将尽快与您联系.如紧急情况,可拨打我司24小时客户服务热线400-888-9369. ";
+                    msg+="\n请保持手机畅通,我们将尽快与您联系.如紧急情况,可拨打我司24小时客户服务热线400-888-9369. ";
                 }
                 ApiResult sendText =
                         CustomServiceApi.sendText(openId, msg);
@@ -166,8 +166,8 @@ public class ScmController extends MsgControllerAdapter {
             msg="您好，送修的设备已经收到！根据合同约定，设备已超过保修期，如需维修须支付维修费用。本次维修金额为"+order.get("order_price")+"元。" +
                     "\n订单号:<a href=\"" + domain + "/view/order_info.jsp?orderId=" + order.get("id") + "\">"+order.get("order_num")+"</a>" +
                     "\n请选择：" +
-                    "\n<a href=\""+domain+"/view/pay.jsp?orderId="+order.get("id")+"\">1.在线支付</a>" +
-                    "\n<a href=\""+domain+"/view/close.jsp?orderId="+order.get("id")+"\">2.不维修，设备原路返回。</a>";
+                    "\n<b><a href=\""+domain+"/view/pay.jsp?orderId="+order.get("id")+"\">1.在线支付</a></b>" +
+                    "\n<b><a href=\""+domain+"/view/close.jsp?orderId="+order.get("id")+"\">2.不维修，设备原路返回。</a></b>";
         }else{
             msg="您好，暂时没有需要支付的维修单。";
         }

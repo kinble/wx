@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.javen.face.FaceService;
 import com.javen.model.TbOrderHeaders;
+import com.javen.model.TbWiki;
 import com.javen.utils.WeiXinUtils;
 import com.javen.weixin.genvict.EventService;
 import com.javen.weixin.genvict.MenuEnum;
@@ -45,114 +46,114 @@ import com.jfinal.weixin.sdk.msg.out.OutVoiceMsg;
  */
 public class WeixinMsgController extends MsgControllerAdapter {
 	static Log logger = Log.getLog(WeixinMsgController.class);
-	private static final String helpStr = "\t你的品位不错哦1111  么么哒。";
+	private static final String helpStr = "\t欢迎使用金溢科技微信服务号";
 	EhCache ehCache = new EhCache();
 
 	protected void processInTextMsg(InTextMsg inTextMsg){
 		String msgContent = inTextMsg.getContent().trim();
 		String openId = inTextMsg.getFromUserName();
 		System.out.println("用户openId:"+ this.getSessionAttr("openId")+openId);
-		// 帮助提示
-		if ("help".equalsIgnoreCase(msgContent) || "帮助".equals(msgContent)) {
-			OutTextMsg outMsg = new OutTextMsg(inTextMsg);
-			outMsg.setContent(helpStr);
-			render(outMsg);
-		}else if ("mengma".equalsIgnoreCase(msgContent) || "菜单".equals(msgContent)) {
-		}else if (msgContent.equals("1") || msgContent.equals("人脸识别")) {
-			msgContent = "请发一张清晰的照片！" + WeiXinUtils.emoji(0x1F4F7);
-			renderOutTextMsg(msgContent);
-		}else if (msgContent.startsWith("翻译")) {
-			try {
-				msgContent = BaiduTranslate.Translates(msgContent);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				msgContent = "\ue252 翻译出错了 \n\n" + BaiduTranslate.getGuide();
-			}
-			renderOutTextMsg(msgContent);
-		}else if (msgContent.equals("9") || "QQ咨询".equalsIgnoreCase(msgContent)) {
-			String url="http://wpa.qq.com/msgrd?v=3&uin=1472405080&site=qq&menu=yes";
-			String urlStr="<a href=\""+url+"\">点击咨询</a>";
-			renderOutTextMsg("QQ在线咨询"+urlStr);
-		}else if (msgContent.equals("微信支付")) {
-			String url="http://kinble.ngrok.xiaomiqiu.cn/pay?openId=o_pncsidC-pRRfCP4zj98h6slREw&total_fee=0.01";
-			String urlStr="<a href=\""+url+"\">微信支付测试11</a>";
-			renderOutTextMsg(urlStr);
-		}else if (msgContent.equals("微信支付测试")) {
-			String url="http://kinble.ngrok.xiaomiqiu.cn/paytest?openId=o_pncsidC-pRRfCP4zj98h6slREw&total_fee=0.01";
-			String urlStr="<a href=\""+url+"\">微信支付测试222</a>";
-			renderOutTextMsg(urlStr);
-		}else if (msgContent.equals("8")) {
-			String calbackUrl=PropKit.get("domain")+"/oauth";
-			String url=SnsAccessTokenApi.getAuthorizeURL(PropKit.get("appId"), calbackUrl, "111",false);
-			String urlStr="<a href=\""+url+"\">点击我授权</a>";
-			System.out.println("urlStr "+urlStr);
-			renderOutTextMsg("授权地址"+urlStr);
-		}else if ("jssdk".equalsIgnoreCase(msgContent)) {
-			String url=PropKit.get("domain")+"/jssdk";
-			String urlStr="<a href=\""+url+"\">JSSDK</a>";
-			renderOutTextMsg("地址"+urlStr);
-		}	else if ("模板消息".equalsIgnoreCase(msgContent)) {
-
-			SimpleDateFormat sdf=new SimpleDateFormat("yyyy年MM月dd日  HH:mm:ss");
-			String time=sdf.format(new Date());
-			String json = TemplateData.New()
-					.setTouser(inTextMsg.getFromUserName())
-					.setTemplate_id("BzC8RvHu1ICOQfO4N7kp6EWz9VAbISJjV2fO5t7MiXE")
-					.setUrl("http://www.cnblogs.com/zyw-205520/tag/%E5%BE%AE%E4%BF%A1/")
-					.add("first", "您好,你已购买课程成功", "#743A3A")
-					.add("keyword1", "微信公众号开发公开课", "#0000FF")
-					.add("keyword2", "免费", "#0000FF")
-					.add("keyword3", "Javen205","#0000FF")
-					.add("keyword4", time, "#0000FF")
-					.add("remark", "请点击详情直接看课程直播，祝生活愉快", "#008000")
-					.build();
-			System.out.println(json);
-			ApiResult result = TemplateMsgApi.send(json);
-
-			System.out.println(result.getJson());
-
-			renderNull();
-		}else if("异步回复多个消息".equals(msgContent)){
-			final String toUser = inTextMsg.getFromUserName();
-			new Thread(new Runnable() {
-
-				@Override
-				public void run() {
-
-
-					ApiResult sendText = CustomServiceApi.sendText(toUser, "客服消息");
-
-					System.out.println(sendText.getJson());
-
-					List<Articles> list = new ArrayList<Articles>();
-
-					Articles articles1=new Articles();
-					articles1.setTitle("测试异步回复多个消息");
-					articles1.setDescription("客服多图文消息");
-					articles1.setPicurl("http://img.pconline.com.cn/images/upload/upc/tx/wallpaper/1609/27/c0/27587202_1474952311163_800x600.jpg");
-					articles1.setUrl("http://www.cnblogs.com/zyw-205520/tag/%E5%BE%AE%E4%BF%A1/");
-
-
-					Articles articles2=new Articles();
-					articles2.setTitle("微信买单、刷卡、扫码、公众号支付");
-					articles2.setDescription("微信支付教程");
-					articles2.setPicurl("http://desk.fd.zol-img.com.cn/t_s960x600c5/g4/M01/0D/04/Cg-4WVP_npmIY6GRAKcKYPPMR3wAAQ8LgNIuTMApwp4015.jpg");
-					articles2.setUrl("http://www.jianshu.com/notebooks/2736169/latest");
-
-
-					list.add(articles2);
-					list.add(articles1);
-
-					CustomServiceApi.sendNews(toUser, list );
-
-				}
-			}).start();
-
-			//回复被动响应消息
-			renderOutTextMsg("313你发的内容为："+msgContent);
-
-
-		} else {
+//		// 帮助提示
+//		if ("help".equalsIgnoreCase(msgContent) || "帮助".equals(msgContent)) {
+//			OutTextMsg outMsg = new OutTextMsg(inTextMsg);
+//			outMsg.setContent(helpStr);
+//			render(outMsg);
+//		}else if ("mengma".equalsIgnoreCase(msgContent) || "菜单".equals(msgContent)) {
+//		}else if (msgContent.equals("1") || msgContent.equals("人脸识别")) {
+//			msgContent = "请发一张清晰的照片！" + WeiXinUtils.emoji(0x1F4F7);
+//			renderOutTextMsg(msgContent);
+//		}else if (msgContent.startsWith("翻译")) {
+//			try {
+//				msgContent = BaiduTranslate.Translates(msgContent);
+//			} catch (Exception e) {
+//				// TODO Auto-generated catch block
+//				msgContent = "\ue252 翻译出错了 \n\n" + BaiduTranslate.getGuide();
+//			}
+//			renderOutTextMsg(msgContent);
+//		}else if (msgContent.equals("9") || "QQ咨询".equalsIgnoreCase(msgContent)) {
+//			String url="http://wpa.qq.com/msgrd?v=3&uin=1472405080&site=qq&menu=yes";
+//			String urlStr="<a href=\""+url+"\">点击咨询</a>";
+//			renderOutTextMsg("QQ在线咨询"+urlStr);
+//		}else if (msgContent.equals("微信支付")) {
+//			String url="http://kinble.ngrok.xiaomiqiu.cn/pay?openId=o_pncsidC-pRRfCP4zj98h6slREw&total_fee=0.01";
+//			String urlStr="<a href=\""+url+"\">微信支付测试11</a>";
+//			renderOutTextMsg(urlStr);
+//		}else if (msgContent.equals("微信支付测试")) {
+//			String url="http://kinble.ngrok.xiaomiqiu.cn/paytest?openId=o_pncsidC-pRRfCP4zj98h6slREw&total_fee=0.01";
+//			String urlStr="<a href=\""+url+"\">微信支付测试222</a>";
+//			renderOutTextMsg(urlStr);
+//		}else if (msgContent.equals("8")) {
+//			String calbackUrl=PropKit.get("domain")+"/oauth";
+//			String url=SnsAccessTokenApi.getAuthorizeURL(PropKit.get("appId"), calbackUrl, "111",false);
+//			String urlStr="<a href=\""+url+"\">点击我授权</a>";
+//			System.out.println("urlStr "+urlStr);
+//			renderOutTextMsg("授权地址"+urlStr);
+//		}else if ("jssdk".equalsIgnoreCase(msgContent)) {
+//			String url=PropKit.get("domain")+"/jssdk";
+//			String urlStr="<a href=\""+url+"\">JSSDK</a>";
+//			renderOutTextMsg("地址"+urlStr);
+//		}	else if ("模板消息".equalsIgnoreCase(msgContent)) {
+//
+//			SimpleDateFormat sdf=new SimpleDateFormat("yyyy年MM月dd日  HH:mm:ss");
+//			String time=sdf.format(new Date());
+//			String json = TemplateData.New()
+//					.setTouser(inTextMsg.getFromUserName())
+//					.setTemplate_id("BzC8RvHu1ICOQfO4N7kp6EWz9VAbISJjV2fO5t7MiXE")
+//					.setUrl("http://www.cnblogs.com/zyw-205520/tag/%E5%BE%AE%E4%BF%A1/")
+//					.add("first", "您好,你已购买课程成功", "#743A3A")
+//					.add("keyword1", "微信公众号开发公开课", "#0000FF")
+//					.add("keyword2", "免费", "#0000FF")
+//					.add("keyword3", "Javen205","#0000FF")
+//					.add("keyword4", time, "#0000FF")
+//					.add("remark", "请点击详情直接看课程直播，祝生活愉快", "#008000")
+//					.build();
+//			System.out.println(json);
+//			ApiResult result = TemplateMsgApi.send(json);
+//
+//			System.out.println(result.getJson());
+//
+//			renderNull();
+//		}else if("异步回复多个消息".equals(msgContent)){
+//			final String toUser = inTextMsg.getFromUserName();
+//			new Thread(new Runnable() {
+//
+//				@Override
+//				public void run() {
+//
+//
+//					ApiResult sendText = CustomServiceApi.sendText(toUser, "客服消息");
+//
+//					System.out.println(sendText.getJson());
+//
+//					List<Articles> list = new ArrayList<Articles>();
+//
+//					Articles articles1=new Articles();
+//					articles1.setTitle("测试异步回复多个消息");
+//					articles1.setDescription("客服多图文消息");
+//					articles1.setPicurl("http://img.pconline.com.cn/images/upload/upc/tx/wallpaper/1609/27/c0/27587202_1474952311163_800x600.jpg");
+//					articles1.setUrl("http://www.cnblogs.com/zyw-205520/tag/%E5%BE%AE%E4%BF%A1/");
+//
+//
+//					Articles articles2=new Articles();
+//					articles2.setTitle("微信买单、刷卡、扫码、公众号支付");
+//					articles2.setDescription("微信支付教程");
+//					articles2.setPicurl("http://desk.fd.zol-img.com.cn/t_s960x600c5/g4/M01/0D/04/Cg-4WVP_npmIY6GRAKcKYPPMR3wAAQ8LgNIuTMApwp4015.jpg");
+//					articles2.setUrl("http://www.jianshu.com/notebooks/2736169/latest");
+//
+//
+//					list.add(articles2);
+//					list.add(articles1);
+//
+//					CustomServiceApi.sendNews(toUser, list );
+//
+//				}
+//			}).start();
+//
+//			//回复被动响应消息
+//			renderOutTextMsg("313你发的内容为："+msgContent);
+//
+//
+//		} else {
 			Object date = ehCache.get("tenMinute",openId+"___serviceTimes");
 			//如果点击过在线客服并且10分钟之后有互动则继续将聊天内容转发给客服,否则就自动回复
 			if(date != null){
@@ -161,12 +162,14 @@ public class WeixinMsgController extends MsgControllerAdapter {
 				render(outCustomMsg);
 				//renderOutTextMsg("消息已转发客服! >>>> "+msgContent);
 			}else{
-				renderOutTextMsg("然后嘞? >>>> "+msgContent);
+				TbWiki tbWiki = TbWiki.me.getNext(msgContent);
+				if(tbWiki != null){
+					renderOutTextMsg(tbWiki.get("question")+"\n答:"+tbWiki.get("answer"));
+				}else{
+					renderOutTextMsg("你好，如果您需要客服在线解答您的问题,请点击人工服务菜单的在线客服。");
+				}
 			}
-		}
-		//renderOutTextMsg("然后嘞? >>>> "+msgContent);
-//		OutCustomMsg outCustomMsg = new OutCustomMsg(inTextMsg);
-//		render(outCustomMsg);
+//		}
 
 	}
 
@@ -381,29 +384,22 @@ public class WeixinMsgController extends MsgControllerAdapter {
 				renderOutTextMsg("您好,我们的人工服务时间为: 08:00-18:00 您可以在线留言,我们将会及时跟进.谢谢配合. ");
 			}else{
 				OutTextMsg outMsg = new OutTextMsg(inMenuEvent);
-				outMsg.setContent("在呢亲，请问有什么可以帮您的？");
+				outMsg.setContent(PropKit.get("custService_reply"));
 				System.out.println("缓存--->"+ehCache.get("tenMinute",openId+"___serviceTimes"));
 				ehCache.put("tenMinute",openId+"___serviceTimes",new Date());
 				render(outMsg);
 			}
 		}else if(MenuEnum.MENU_LXFS.getName().equals(inMenuEvent.getEventKey())){//联系方式
 			OutTextMsg outMsg = new OutTextMsg(inMenuEvent);
-			outMsg.setContent("您好，我们的人工服务时间为：\n08:00-18:00，感谢您使用我们的服务！" +
-					"\n客服1电话:02088888888" +
-					"\n客服2电话:02099999999");
+			outMsg.setContent(PropKit.get("contact_content"));
+//			outMsg.setContent("您好，我们的人工服务时间为：\n08:00-18:00，感谢您使用我们的服务！" +
+//					"\n客服1电话:02088888888" +
+//					"\n客服2电话:02099999999");
 			render(outMsg);
 		}else if(MenuEnum.MENU_QTLJ.getName().equals(inMenuEvent.getEventKey())){//常用链接
 			OutTextMsg outMsg = new OutTextMsg(inMenuEvent);
-			outMsg.setContent("公司官网:\nhttp://www.genvict.com/");
+			outMsg.setContent(PropKit.get("website_content"));
 			render(outMsg);
-		}else if(MenuEnum.MENU_BX.getName().equals(inMenuEvent.getEventKey())){//常用链接
-			String url="http://kinble.s1.natapp.cc/jssdk/close";
-			//String url=PropKit.get("domain")+"/view/message.jspjsp";
-			//String url="http://kinble.s1.natapp.cc/redirect?state=my";
-			//setAttr("openId",openId);
-			String urlStr="<a href=\""+url+"\">测试网页</a>";
-			renderOutTextMsg("地址"+urlStr);
-
 		}else{//跳转页面做测试
 			OutTextMsg outMsg = new OutTextMsg(inMenuEvent);
 			outMsg.setContent("功能建设中,敬请等待...");

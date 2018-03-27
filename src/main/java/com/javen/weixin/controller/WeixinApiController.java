@@ -1,5 +1,6 @@
 package com.javen.weixin.controller;
 
+import com.jfinal.kit.PropKit;
 import com.jfinal.weixin.sdk.api.ApiResult;
 import com.jfinal.weixin.sdk.api.CallbackIpApi;
 import com.jfinal.weixin.sdk.api.CustomServiceApi;
@@ -37,12 +38,12 @@ public class WeixinApiController extends ApiController {
 				"           {    \n" +
 				"               \"type\":\"view\",\n" +
 				"               \"name\":\"在线报修\",\n" +
-				"\t\t\t   \"url\":\"http://kinble.s1.natapp.cc/redirect?state=bx\"\n" +
+				"\t\t\t   \"url\":\""+ PropKit.get("domain")+"/redirect?state=bx\"\n" +
 				"            },\n" +
 				"            {\n" +
 				"               \"type\":\"view\",\n" +
 				"               \"name\":\"在线报障\",\n" +
-				"\t\t\t   \"url\":\"http://kinble.s1.natapp.cc/redirect?state=bz\"\n" +
+				"\t\t\t   \"url\":\""+ PropKit.get("domain")+"/redirect?state=bz\"\n" +
 				"            },\n" +
 				"            {\n" +
 				"               \"type\":\"click\",\n" +
@@ -66,7 +67,7 @@ public class WeixinApiController extends ApiController {
 				"            {\n" +
 				"               \"type\":\"view\",\n" +
 				"               \"name\":\"在线留言\",\n" +
-				"\t\t\t   \"url\":\"http://kinble.s1.natapp.cc/redirect?state=zxly\"\n" +
+				"\t\t\t   \"url\":\""+ PropKit.get("domain")+"/redirect?state=zxly\"\n" +
 				"            }]\n" +
 				"           \n" +
 				"      },\n" +
@@ -76,7 +77,7 @@ public class WeixinApiController extends ApiController {
 				"           {    \n" +
 				"               \"type\":\"view\",\n" +
 				"               \"name\":\"常见问题\",\n" +
-				"\t\t\t   \"url\":\"http://kinble.s1.natapp.cc/view/FAQ.jsp\"\n" +
+				"\t\t\t   \"url\":\""+ PropKit.get("domain")+"/view/FAQ.jsp\"\n" +
 				"            },\n" +
 				"            {\n" +
 				"               \"type\":\"click\",\n" +
@@ -118,7 +119,7 @@ public class WeixinApiController extends ApiController {
 		String str = " {\n" +
 				"           \"touser\":\"oLdOB1NY_i_eRbTvPsDQH_iirgMc\",\n" +
 				"           \"template_id\":\"9SIa8ph1403NEM3qk3z9-go-p4kBMeh-HGepQZVdA7w\",\n" +
-				"           \"url\":\"http://www.sina.com\",\n" +
+				"           \"url\":\"www.sina.com\",\n" +
 				"           \"topcolor\":\"#FF0000\",\n" +
 				"           \"data\":{\n" +
 				"                   \"first\": {\n" +
@@ -175,7 +176,7 @@ public class WeixinApiController extends ApiController {
 	public void getShorturl()
 	{
 		String str = "{\"action\":\"long2short\"," +
-				"\"long_url\":\"http://wap.koudaitong.com/v2/showcase/goods?alias=128wi9shh&spm=h56083&redirect_count=1\"}";
+				"\"long_url\":\"wap.koudaitong.com/v2/showcase/goods?alias=128wi9shh&spm=h56083&redirect_count=1\"}";
 		ApiResult apiResult = ShorturlApi.getShorturl(str);
 		renderText(apiResult.getJson());
 	}

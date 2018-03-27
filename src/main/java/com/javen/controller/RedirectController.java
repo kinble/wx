@@ -18,8 +18,9 @@ import java.util.Map;
  */
 public class RedirectController extends Controller {
 	public void index(){
+		String domain = PropKit.get("domain");
 		String url="https://open.weixin.qq.com/connect/oauth2/authorize?appid="+PropKit.get("appId")
-				+"&redirect_uri=http://kinble.s1.natapp.cc/oauth?response_type=code&scope=snsapi_base&state="+getPara("state")+"&connect_redirect=1#wechat_redirect";
+				+"&redirect_uri="+domain+"/oauth?response_type=code&scope=snsapi_base&state="+getPara("state")+"&connect_redirect=1#wechat_redirect";
 		System.out.println(url);
 		redirect(url);
 	}
