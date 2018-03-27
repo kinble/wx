@@ -8,7 +8,7 @@
 String path = request.getContextPath();
 String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
   + path + "/";
-  List<TbWiki> list = TbWiki.me.getAll();
+  List<TbWiki> list = TbWiki.me.getCJWTAll();
 %>
 <html lang="en" style="font-size: 16px;">
 <head>

@@ -15,7 +15,7 @@ $(".comInfoBox .checked-addr span:first i").on("click", function () {
 })
 
 //
-var serverApi = "http://genvict.ngrok.xiaomiqiu.cn/genvict/";
+var serverApi = "http://test.imema.top/genvict/";
 
 //0-创建订单，1-修改订单
 var actionTypeCfg = ["REPAIR_CREATE", "REPAIR_UPDATE"];
@@ -39,8 +39,8 @@ function perfectAjax(fixType,  actionType) {
         }
         var detailAddress = $(".comInfoBox .detailAddress textarea").val();
 
-        if (userName == "" || mobile == "" || sn == "" || detailAddress == "") {
-            $.alert("请填写完整信息！", "操作错误！");
+        if (userName == "" || mobile == "" || memo == "" || detailAddress == "" || p_c_a == "") {
+            $.alert("请填写完整信息222！", "操作错误！");
             return;
         }
 
@@ -59,11 +59,11 @@ function perfectAjax(fixType,  actionType) {
 
     }
     /*var scr_1 = $("#filImg_1 img").attr("src");
-    var scr_2 = $("#filImg_2 img").attr("src")
-    var licenceBit = scr_1.split(",")[1];
-    var doorBit = scr_2.split(",")[1];
-    var licenceSuffix = scr_1.substring(scr_1.indexOf("/")+1,scr_1.indexOf(";"));
-    var doorSuffix = scr_2.substring(scr_2.indexOf("/")+1,scr_2.indexOf(";")); */
+     var scr_2 = $("#filImg_2 img").attr("src")
+     var licenceBit = scr_1.split(",")[1];
+     var doorBit = scr_2.split(",")[1];
+     var licenceSuffix = scr_1.substring(scr_1.indexOf("/")+1,scr_1.indexOf(";"));
+     var doorSuffix = scr_2.substring(scr_2.indexOf("/")+1,scr_2.indexOf(";")); */
     if (actionType == 1) {
         var info = {
             "id": $(".userInfo .orderId").val(),
@@ -78,8 +78,8 @@ function perfectAjax(fixType,  actionType) {
 
         if (info.fpType === "VAT"
             && (info.invoiceName === "" || info.invoiceCode === ""
-                || info.invoiceAddress === "" || info.invoiceBank === ""
-                || info.invoiceBankno === "" || info.invoiceMobile === "")) {
+            || info.invoiceAddress === "" || info.invoiceBank === ""
+            || info.invoiceBankno === "" || info.invoiceMobile === "")) {
             $.alert("请填写完整信息！", "操作错误！");
             //$.toast("请填写完整信息!");
             return;
@@ -88,8 +88,7 @@ function perfectAjax(fixType,  actionType) {
             return;
         }
     }
-
-    $.confirm("您确定要提交订单数据吗?", "确认操作?", function() {
+    $.confirm("您确定要提交"+(actionType==1?"报修信息":"报障信息")+"吗?", "确认操作?", function() {
         $(".spinnerBox").fadeIn();
         $.ajax({
             //url: "http://localhost:8081",
