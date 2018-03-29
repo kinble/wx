@@ -15,7 +15,7 @@ $(".comInfoBox .checked-addr span:first i").on("click", function () {
 })
 
 //
-var serverApi = "http://test.imema.top/genvict/";
+var serverApi = "http://genvict.ngrok.xiaomiqiu.cn/genvict/";
 
 //0-创建订单，1-修改订单
 var actionTypeCfg = ["REPAIR_CREATE", "REPAIR_UPDATE"];
@@ -38,9 +38,13 @@ function perfectAjax(fixType,  actionType) {
             plist.push("");
         }
         var detailAddress = $(".comInfoBox .detailAddress textarea").val();
+        if (mobile.length != 11) {
+            $.alert("请输入完整的手机号码！", "操作错误！");
+            return;
+        }
 
         if (userName == "" || mobile == "" || memo == "" || detailAddress == "" || p_c_a == "") {
-            $.alert("请填写完整信息222！", "操作错误！");
+            $.alert("请填写完整信息！", "操作错误！");
             return;
         }
 
@@ -88,7 +92,7 @@ function perfectAjax(fixType,  actionType) {
             return;
         }
     }
-    $.confirm("您确定要提交"+(actionType==1?"报修信息":"报障信息")+"吗?", "确认操作?", function() {
+    $.confirm("您确定要提交"+(fixType==0?"报障信息":"报修信息")+"吗?", "确认操作?", function() {
         $(".spinnerBox").fadeIn();
         $.ajax({
             //url: "http://localhost:8081",
@@ -118,7 +122,8 @@ function infoLoad() {
     var paramData = getwindowUrl();
     orderId = paramData.orderId;
     needInvoice = paramData.needInvoice;
-    $.get(serverApi + "findOrderBackCallController.action",
+
+    $.get(serverApi + "findOrderBackCallController.action?t="+Math.random(),
         {orderId: orderId}, function (info) {
             if ("SUCCESS" === info.RESPONSETYPE) {
                 info = info.RESPONSEMESSAGE;
@@ -134,6 +139,8 @@ function infoLoad() {
                 $(".userInfo .orderPrice").text(info.orderPrice);
                 $(".userInfo .payStatus").text(info.payStatus == "1" ? "已支付" : "未支付");
                 $(".userInfo .orderId").val(info.id);
+                $(".userInfo .lgCode").text(info.lgCode);
+
 
                 if (needInvoice === "1") {
                     $(".invoiceInfo .selInvType").val(info.fpType);
@@ -150,6 +157,7 @@ function infoLoad() {
             }
         });
 }
+
 
 $(".closeBtn").on("touchstart", function () {
     wx.closeWindow();

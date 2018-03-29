@@ -1,3 +1,4 @@
+<%@ page import="java.util.Date" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
@@ -51,7 +52,10 @@
                     <span>设备类型</span>
                     <select class="machineType" class="text" style="-webkit-appearance:none;appearance:none;border:none;padding:0px 10px;display:block;-webkit-box-sizing:border-box;box-sizing:border-box;background-color: #FFFFFF;color:#333333;border-radius:4px;">
                         <option value="ETC">--电子标签--</option>
-                        <option value="UNITOLL_ETC">蓝牙盒子/微波天线/IC卡/发行设备</option>
+                        <option value="NO_ETC_FX">--发行设备--</option>
+                        <option value="NO_ETC_LY">--蓝牙盒子--</option>
+                        <option value="NO_ETC_WB">--微波天线--</option>
+                        <option value="NO_ETC_IC">--IC卡读写器--</option>
                         <option value="QT_ETC">--其他--</option>
                     </select>
                 </c:when>
@@ -127,7 +131,6 @@
 <script src="/static/dist/picker.min.js"></script>
 <script src="/static/dist/city.js"></script>
 <!--<script src="dist/jquery.uploadView.js"></script>-->
-<script src="/static/js/info.js"></script>
 <script src="/static/weui/lib/fastclick.js"></script>
 <script>
     $(function() {
@@ -135,7 +138,7 @@
     });
 </script>
 <script src="/static/weui/js/jquery-weui.js"></script>
-<script src="/static/js/info.js"></script>
+<script src="/static/js/info.js?time=<%=new Date()%>" +></script>
 <script type="text/javascript">
     if("null" != "<%= request.getSession().getAttribute("link_name")%>"){
         $(".userNameBox .userName").val("<%= request.getSession().getAttribute("link_name")%>");

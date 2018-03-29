@@ -1,3 +1,4 @@
+<%@ page import="java.util.Date" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
@@ -91,6 +92,10 @@
             <span>支付状态</span>
             <span class="payStatus"></span>
         </p>
+        <p>
+            <span>物流单号</span>
+            <span class="lgCode"></span>
+        </p>
     </div>
 <c:if test="${param.needInvoice == '1'}">
     <div class="invoiceInfo">
@@ -172,9 +177,13 @@
 </script>
 <script src="/static/js/common.js"></script>
 <!--<script src="dist/jquery.uploadView.js"></script>-->
-<script src="/static/js/info.js"></script>
+<script src="/static/js/info.js?time=<%=new Date()%>"></script>
 <script>
-    infoLoad();
+
+
+    $(function(){
+        infoLoad();
+    });
 </script>
 </body>
 </html>
