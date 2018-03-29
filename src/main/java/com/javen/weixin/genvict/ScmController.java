@@ -166,8 +166,8 @@ public class ScmController extends MsgControllerAdapter {
             msg="您好，送修的设备已经收到！根据合同约定，设备已超过保修期，如需维修须支付维修费用。本次维修金额为"+order.get("order_price")+"元。" +
                     "\n订单号:<a href=\"" + domain + "/view/order_info.jsp?orderId=" + order.get("id") + "\">"+order.get("order_num")+"</a>" +
                     "\n请选择：" +
-                    "\n<b><a href=\""+domain+"/view/pay.jsp?orderId="+order.get("id")+"\">1.在线支付</a></b>" +
-                    "\n<b><a href=\""+domain+"/view/close.jsp?orderId="+order.get("id")+"\">2.不维修，设备原路返回。</a></b>";
+                    "\n<a href=\""+domain+"/view/pay.jsp?orderId="+order.get("id")+"\">1.在线支付</a>" +
+                    "\n\n<a href=\""+domain+"/view/close.jsp?orderId="+order.get("id")+"\">2.不维修，设备原路返回。</a>";
         }else{
             msg="您好，暂时没有需要支付的维修单。";
         }

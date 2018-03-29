@@ -24,5 +24,11 @@ public class RedirectController extends Controller {
 		System.out.println(url);
 		redirect(url);
 	}
-	
+
+	public void share(){
+		String url = PropKit.get("gzh_url");
+		redirect(url);
+	}
+
+
 }
