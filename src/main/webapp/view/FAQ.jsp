@@ -123,7 +123,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
             <%}
           }%>
 
-</div><a class="-serv" href="tel:4008889369"><img src="../images/help_iphone.png" alt="">联系客服</a></div></div></div></div></div>
+</div>
+          <%--<a class="-serv" href="tel:4008889369"><img src="../images/help_iphone.png" alt="">联系客服</a>--%>
+        </div></div></div></div></div>
 
 </body>
 

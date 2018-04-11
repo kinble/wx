@@ -26,11 +26,12 @@ String openId = request.getSession().getAttribute("openId")+"";
           $.confirm("您确定要取消维修吗?取消之后我们将照回寄地址将设备寄回。", "取消维修?", function() {
               $.post("<%=path %>/scm/closeOrder",
                   {
-                      orderId:'<%=request.getParameter("orderId")%>'
+                      orderId:'<%=request.getParameter("orderId")%>',
+                      type:'<%=request.getParameter("type")%>'
                   },
                   function(res){
                       if (res.code == 0) {
-                          $.alert("我们将依照回寄地址将设备寄回。感谢您使用金溢科技客户服务！", "取消成功！",
+                          $.alert("设备将按回寄地址返回。感谢您使用金溢科技客户服务！", "取消成功！",
                               function() {wx.closeWindow();});
                       }else{
                           $.alert(res.message, "取消失败！",

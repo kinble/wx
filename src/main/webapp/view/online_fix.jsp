@@ -36,8 +36,8 @@
 </div>
 <div class="userInfo">
     <div class="userNameBox clearfix">
-        <span>联系人</span>
-        <input class="userName" type="text" name="" placeholder="输入姓名">
+        <span>联系人</span><span style="color: red;margin-left:0" >*</span>
+        <input class="userName" type="text" name="" placeholder="输入姓名" style="width: 80px">
         <span>+</span>
         <input class="mobile" type="tel" maxlength="11" name="" placeholder="输入手机号">
     </div>
@@ -49,7 +49,7 @@
         <p class="comName clearfix">
             <c:choose>
                 <c:when test="${param.type == '1'}">
-                    <span>设备类型</span>
+                    <span>设备类型</span><span style="color: red">*</span>
                     <select class="machineType" class="text" style="-webkit-appearance:none;appearance:none;border:none;padding:0px 10px;display:block;-webkit-box-sizing:border-box;box-sizing:border-box;background-color: #FFFFFF;color:#333333;border-radius:4px;">
                         <option value="ETC">--电子标签--</option>
                         <option value="NO_ETC_FX">--发行设备--</option>
@@ -60,7 +60,7 @@
                     </select>
                 </c:when>
                 <c:otherwise>
-                    <span>服务类型</span>
+                    <span>服务类型</span><span style="color: red">*</span>
                     <select class="machineType" class="text" style="-webkit-appearance:none;appearance:none;border:none;padding:0px 10px;display:block;-webkit-box-sizing:border-box;box-sizing:border-box;background-color: #FFFFFF;color:#333333;border-radius:4px;">
                         <option value="MACHINE_REPLACE">--设备更换/维修--</option>
                         <option value="MACHINE_BUY">--配件更换/购买--</option
@@ -74,7 +74,7 @@
         <p class="comName clearfix"><span>SN号</span>
             <textarea class="sn" placeholder="输入SN号,多个请用逗号隔开"></textarea>
         </p>
-        <p class="comName clearfix"><span>不良现象</span>
+        <p class="comName clearfix"><span>不良现象</span><span style="color: red">*</span>
             <textarea class="memo" placeholder="输入不良现象"></textarea>
         </p>
     </div>
@@ -84,7 +84,7 @@
     </div>
     <div class="comInfoBox">
         <p class="layer clearfix">
-            <span>所在地</span>
+            <span>所在地</span><span style="color: red">*</span>
             <input id="sel_city" readonly="readonly" type="text" placeholder="省+市+区" onfocus="this.blur();">
             <input type="hidden" name="firstLayer" id="firstLayer" value="" />
             <input type="hidden" name="secondLayer" id="secondLayer" value="" />
@@ -92,7 +92,7 @@
             <input type="hidden" name="openId" id="openId" value="<%= request.getSession().getAttribute("openId")%>" />
         </p>
         <p class="detailAddress clearfix">
-            <span>详细街道地址</span>
+            <span>详细街道地址</span><span style="color: red">*</span>
             <textarea rows="2" placeholder="输入详细地址"></textarea>
         </p>
     </div>

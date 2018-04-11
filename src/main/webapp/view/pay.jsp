@@ -57,8 +57,7 @@
             function(res){
                 // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
                 if(res.err_msg == "get_brand_wcpay_request:ok" ) {
-                    layer.msg("支付成功", {shift: 6});
-                    wx.closeWindow();
+                    $.alert(res.message, "支付成功！\n如需取消订单,请在24小时内取消,过时将无法取消",function() {wx.closeWindow();});
                     //self.location="<%=path %>/course/getOrderCourseById?id=${course.id }+&openId=${openId} ";
                 }else{
                     //alert(JSON.stringify(res));

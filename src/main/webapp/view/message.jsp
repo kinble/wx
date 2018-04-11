@@ -48,7 +48,7 @@ String openId = request.getSession().getAttribute("openId")+"";
       <div class="weui_cell">
         <div class="weui_cell_hd"><label class="weui_label">联系人</label></div>
         <div class="weui_cell_bd weui_cell_primary">
-          <input class="weui_input userName" type="tel" placeholder="请输入联系人">
+          <input class="weui_input userName" type="" placeholder="请输入联系人">
         </div>
       </div>
       <div class="weui_cell">

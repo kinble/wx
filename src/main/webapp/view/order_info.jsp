@@ -52,7 +52,7 @@
             <span>设备类型</span>
             <span class="machineType"></span>
         </p>
-        <p>
+        <p class = 'bug_hide'>
             <span>是否过保</span>
             <span class="shelfLife"></span>
         </p>
@@ -84,15 +84,23 @@
             <span>订单号</span>
             <span class="orderNum"></span>
         </p>
-        <p>
+        <p class = 'bug_hide'>
             <span>订单金额</span>
             <span style="width:.3rem">￥</span><span class="orderPrice"></span>
         </p>
-        <p>
+        <p class = ''>
+            <span>订单状态</span>
+            <span class="orderStatus"></span>
+        </p>
+        <p class = 'bug_hide'>
             <span>支付状态</span>
             <span class="payStatus"></span>
         </p>
-        <p>
+        <p class = 'bug_hide'>
+            <span>物流公司</span>
+            <span class="lgCompany"></span>
+        </p>
+        <p class = 'bug_hide'>
             <span>物流单号</span>
             <span class="lgCode"></span>
         </p>
@@ -135,13 +143,17 @@
                     <input class="invBanckNo" type="number" name="" placeholder="输入开户账号"/>
                 </p>
                 <p>
-                    <span>联系人电话</span>
-                    <input class="invMobile" type="number" name="" placeholder="输入联系人电话"/>
+                    <span>电话</span>
+                    <input class="invMobile" type="number" name="" placeholder="输入电话"/>
                 </p>
             </div>
         </div>
     </div>
+    <br>
     <a class="invoiceBtn">不开票</a>
+    <br>
+    <span >&nbsp;&nbsp;&nbsp;&nbsp;注:更多关于发票信息可联系我们的在线客服</span>
+
     <div style="text-align:center; ">
         <p style="display:inline-block;">
             <a class="pay closeBtn">返回</a>
