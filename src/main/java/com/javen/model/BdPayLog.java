@@ -32,6 +32,35 @@ public class BdPayLog extends Model<BdPayLog> {
 		me.set("pay_amount", pay_amount);
 		me.set("status", status);
 		me.set("remark", remark);
+		me.set("created_by", last_updated_by);
+		me.set("creation_date",  new Date());
+		me.set("last_updated_by", last_updated_by);
+		me.set("last_update_date", new Date());
+		return me.save();
+	}
+
+	public boolean saveInv(String source_type, Integer source_header_id, String pay_type, String out_trade_no,
+						String pay_no, BigDecimal pay_amount,String status,String remark,String last_updated_by,
+						   String fpType,String invoiceName,String invoiceCode,String invoiceAddress,String invoiceBank,
+						   String invoiceBankno, String invoiceMobile){
+		BdPayLog me = new BdPayLog();
+		me.set("source_type", source_type);
+		me.set("source_header_id", source_header_id);
+		me.set("pay_type", pay_type);
+		me.set("out_trade_no", out_trade_no);
+		me.set("pay_no", pay_no);
+		me.set("pay_amount", pay_amount);
+		me.set("status", status);
+		me.set("remark", remark);
+		me.set("fp_type", fpType);
+		me.set("invoice_name", invoiceName);
+		me.set("invoice_code", invoiceCode);
+		me.set("invoice_address", invoiceAddress);
+		me.set("invoice_bank", invoiceBank);
+		me.set("invoice_bankno", invoiceBankno);
+		me.set("invoice_mobile", invoiceMobile);
+		me.set("created_by", last_updated_by);
+		me.set("creation_date",  new Date());
 		me.set("last_updated_by", last_updated_by);
 		me.set("last_update_date", new Date());
 		return me.save();

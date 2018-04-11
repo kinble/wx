@@ -2,6 +2,7 @@ package com.javen.weixin.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -164,7 +165,11 @@ public class WeixinMsgController extends MsgControllerAdapter {
 			}else{
 				TbWiki tbWiki = TbWiki.me.getNext(msgContent);
 				if(tbWiki != null){
-					renderOutTextMsg(tbWiki.get("question")+"\n答:"+tbWiki.get("answer"));
+					if("CJWT".equals(tbWiki.get("type"))){
+						renderOutTextMsg(tbWiki.get("question")+"\n答:"+tbWiki.get("answer"));
+					}else{
+						renderOutTextMsg(tbWiki.get("answer")+"");
+					}
 				}else{
 					renderOutTextMsg("你好，如果您需要客服在线解答您的问题,请点击人工服务菜单的在线客服。");
 				}
@@ -380,8 +385,12 @@ public class WeixinMsgController extends MsgControllerAdapter {
 			String msg= new ScmController().getPayMsg(openId,null);
 			renderOutTextMsg(msg);
 		}else if(MenuEnum.MENU_ZXKF.getName().equals(inMenuEvent.getEventKey())){//在线客服
-			if((new Date().getHours() > 18) || (new Date().getHours() < 8)){
-				renderOutTextMsg("您好,我们的人工服务时间为: 08:00-18:00 您可以在线留言,我们将会及时跟进.谢谢配合. ");
+			Calendar cal = Calendar.getInstance();// 当前日期
+			int hour = cal.get(Calendar.HOUR_OF_DAY);// 获取小时
+			int minute = cal.get(Calendar.MINUTE);// 获取分钟
+			int minuteOfDay = hour * 60 + minute;// 从0:00分开是到目前为止的分钟数
+			if(minuteOfDay < 510 || minuteOfDay > 1050){
+				renderOutTextMsg("您好，我们的人工服务时间为工作日08:30-17:30,如有紧急情况，可拨打我司24小时客户服务热线<a href=\"tel:400-888-9369\">400-888-9369</a>. ");
 			}else{
 				OutTextMsg outMsg = new OutTextMsg(inMenuEvent);
 				outMsg.setContent(PropKit.get("custService_reply"));
@@ -392,9 +401,6 @@ public class WeixinMsgController extends MsgControllerAdapter {
 		}else if(MenuEnum.MENU_LXFS.getName().equals(inMenuEvent.getEventKey())){//联系方式
 			OutTextMsg outMsg = new OutTextMsg(inMenuEvent);
 			outMsg.setContent(PropKit.get("contact_content"));
-//			outMsg.setContent("您好，我们的人工服务时间为：\n08:00-18:00，感谢您使用我们的服务！" +
-//					"\n客服1电话:02088888888" +
-//					"\n客服2电话:02099999999");
 			render(outMsg);
 		}else if(MenuEnum.MENU_QTLJ.getName().equals(inMenuEvent.getEventKey())){//常用链接
 			OutTextMsg outMsg = new OutTextMsg(inMenuEvent);

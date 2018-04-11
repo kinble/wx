@@ -74,7 +74,7 @@ public class ScmController extends MsgControllerAdapter {
                 }else{
                     String msg="您好!\n" +
                             "订单编号为:<a href=\"" + PropKit.get("domain") + "/view/order_info.jsp?orderId=" + order.get("id") + "\">" +order.get("order_num")+"</a>"+
-                            "的设备已经维修完毕。我们将依照回寄地址将设备寄回。感谢您使用金溢科技客户服务！";
+                            "的设备已经维修完毕。设备将按回寄地址返回。感谢您使用金溢科技客户服务！";
                     ApiResult sendText =
                             CustomServiceApi.sendText(openId, msg);
                 }
@@ -109,7 +109,7 @@ public class ScmController extends MsgControllerAdapter {
                         if("广东省".equals(order.get("province"))){
                             msg+="\n请将设备移交给粤通卡营业厅工作人员,后续我们将通过微信通知您有关设备维修情况,若超过质保期,将收取维修费。";
                         }else{
-                            msg+="\n您可前往当地运营商(可前往安装地点进处理),如有疑问可拨打我司客户服务热线: 400-888-9369";
+                            msg+="\n您可前往当地运营商(可前往安装地点进处理),如有疑问可拨打我司客户服务热线: <a href=\"tel:400-888-9369\">400-888-9369</a>";
                         }
                     }else{
                         msg+="\n请将设备寄往我司指定维修点: "+PropKit.get("sign_address");
@@ -118,7 +118,7 @@ public class ScmController extends MsgControllerAdapter {
                 }else{
                     msg="您好!报障信息已经提交成功."+
                             "\n订单编号为:<a href=\"" + PropKit.get("domain") + "/view/order_info.jsp?orderId=" + order.get("id") + "\">" +order.get("order_num")+"</a>";
-                    msg+="\n请保持手机畅通,我们将尽快与您联系.如紧急情况,可拨打我司24小时客户服务热线400-888-9369. ";
+                    msg+="\n请保持手机畅通,我们将尽快与您联系.如紧急情况,可拨打我司24小时客户服务热线<a href=\"tel:400-888-9369\">400-888-9369</a>. ";
                 }
                 ApiResult sendText =
                         CustomServiceApi.sendText(openId, msg);
@@ -132,17 +132,20 @@ public class ScmController extends MsgControllerAdapter {
      */
     public void closeOrder(){
         String orderId = getPara("orderId");
+        String type = getPara("type");
         String openId = null;
         TbOrderHeaders order = TbOrderHeaders.me.findById(orderId);
-        if (order != null && "0".equals(order.get("pay_status")+"") && "Y".equals(order.get("shelf_life")+"")) {
+        if ((order != null && "0".equals(order.get("pay_status")+"") && "Y".equals(order.get("shelf_life")+"")) || "24".equals(type)) {
             openId = order.get("open_id");
             order.set("order_status","APPROVED");
+            order.set("close_status","CANCEL");
             order.set("is_repair","N");
+            order.set("remark","客户主动取消订单!");
             order.update();
             ApiResult sendText = CustomServiceApi.sendText(openId,
                     "您好!" +
                         "\n订单编号:<a href=\"" + PropKit.get("domain") + "/view/order_info.jsp?orderId=" + order.get("id") + "\">" +order.get("order_num")+"</a>"+
-                        "取消成功！我们将依照回寄地址将设备寄回。感谢您使用金溢科技客户服务！");
+                        "取消成功！设备将按回寄地址返回。感谢您使用金溢科技客户服务！");
         } else {
             ajax.addError("订单状态异常,无法取消!");
             renderJson(ajax);

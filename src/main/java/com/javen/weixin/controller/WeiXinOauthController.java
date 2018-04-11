@@ -125,8 +125,14 @@ public class WeiXinOauthController extends ApiController{
 						setSessionAttr("customer_mobile",cust.get("customer_mobile"));
 					}
 					render("/view/message.jsp");
+				}else if (state.equals("zxzf"))  {
+					//购买 在线支付
+					redirect("/view/cust_pay.jsp");
+				}else if (state.equals("orderlist"))  {
+					//维修单列表
+					redirect("/view/orderList.jsp");
 				}else if (state.equals("pay"))  {
-					render("/view/customer.jsp");
+					render("/view/cust_pay.jsp");
 				}else {
 					redirect("/login");
 				}

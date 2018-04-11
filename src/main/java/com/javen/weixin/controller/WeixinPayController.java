@@ -75,24 +75,36 @@ public class WeixinPayController extends ApiController {
 		ac.setEncodingAesKey(PropKit.get("encodingAesKey", "setting it in config file"));
 		return ac;
 	}
-	
+
+	/**
+	 * 客户直接填金额购买
+	 */
 	public void index() {
 		
 		// openId，采用 网页授权获取 access_token API：SnsAccessTokenApi获取
 		String openId=getPara("openId");
 		String total_fee=getPara("total_fee");
+		String remark=getPara("remark");
+
+		String fpType=getPara("fpType");
+		String invoiceName=getPara("invoiceName");
+		String invoiceCode=getPara("invoiceCode");
+		String invoiceAddress=getPara("invoiceAddress");
+		String invoiceBank=getPara("invoiceBank");
+		String invoiceBankno=getPara("invoiceBankno");
+		String invoiceMobile=getPara("invoiceMobile");
+
 		if (StrKit.isBlank(total_fee)) {
 			ajax.addError("请输入数字金额");
 			renderJson(ajax);
 			return;
 		}
-		// 统一下单文档地址：https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_1
-		
+
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("appid", appid);
 		params.put("mch_id", partner);
 		params.put("openid", openId);
-		params.put("body", "Javen微信公众号极速开发");
+		params.put("body", "金溢科技设备购买在线支付");
 		String out_trade_no=System.currentTimeMillis()+"";
 		params.put("out_trade_no", out_trade_no);
 		int price=((int)(Float.valueOf(total_fee)*100));
@@ -131,6 +143,12 @@ public class WeixinPayController extends ApiController {
 			renderJson(ajax);
 			return;
 		}
+
+		//记录支付日志
+		BdPayLog.me.saveInv("ZXZF",-1,"WeixinPay",out_trade_no,
+				null,new BigDecimal(total_fee),"NEW",remark,openId,fpType,
+				invoiceName,invoiceCode,invoiceAddress,invoiceBank,invoiceBankno,invoiceMobile);
+
 		// 以下字段在return_code 和result_code都为SUCCESS的时候有返回
 		String prepay_id = result.get("prepay_id");
 		
@@ -164,7 +182,7 @@ public class WeixinPayController extends ApiController {
 
 		TbOrderHeaders order = TbOrderHeaders.me.findById(orderId);
 		if (order != null && "0".equals(order.get("pay_status")+"") && "Y".equals(order.get("shelf_life")+"")
-				&& !"N".equals(order.get("is_repair")+"") ) {
+				&& !"N".equals(order.get("is_repair")+"") && !"COMPLETE".equals(order.get("order_status")+"") ) {
 			openId = order.get("open_id");
 			total_fee = order.get("order_price");
 		} else {
@@ -285,17 +303,18 @@ public class WeixinPayController extends ApiController {
 			if (("SUCCESS").equals(result_code)) {
 				BdPayLog bdPayLog =BdPayLog.me.findByOutTradeNo(out_trade_no);
 				TbOrderHeaders order = TbOrderHeaders.me.findById(bdPayLog.get("source_header_id"));
+
+				BigDecimal wx_total_fee = new BigDecimal(total_fee).divide(new BigDecimal(100));
 				if(!transaction_id.equals(bdPayLog.get("pay_no"))){
 					bdPayLog.set("pay_no",transaction_id);
 					bdPayLog.set("last_update_date",new Date());
 					bdPayLog.set("status","SUCCESS");
 					if(order != null){
-						BigDecimal wx_total_fee = new BigDecimal(total_fee).divide(new BigDecimal(100));
+
 						BigDecimal order_price = order.get("order_price");
 						if(wx_total_fee.compareTo(order_price) != 0){
 							bdPayLog.set("remark","支付金额和订单金额不一致!支付金额:"+wx_total_fee+",订单金额:"+order_price);
 						}
-
 						if(!"COMPLETE".equals(order.get("order_status")))order.set("order_status","APPROVED");
 						order.set("pay_status",1);
 						order.set("pay_type","在线支付");
@@ -313,19 +332,24 @@ public class WeixinPayController extends ApiController {
 						order.update();
 					}
 				}
-				if("ETC".equals(order.get("machine_type"))){
-					if(!"广东省".equals(order.get("province"))) {
-						log.warn("异常!!!!非广东省电子标签的维修单进行了支付!!!");
+				if(order != null) {
+					if ("ETC".equals(order.get("machine_type"))) {
+						if (!"广东省".equals(order.get("province"))) {
+							log.warn("异常!!!!非广东省电子标签的维修单进行了支付!!!");
+						}
+						ApiResult sendText = CustomServiceApi.sendText(openId,
+								"订单<a href=\"" + PropKit.get("domain") + "/view/order_info.jsp?orderId=" + order.get("id") + "\">" + order.get("order_num") + "</a>" +
+										"支付成功！\n您送修的设备已经维修完毕，请在3个工作日后前往送修的营业厅领取设备及发票。感谢您使用金溢科技客户服务！");
+					} else {
+						ApiResult sendText = CustomServiceApi.sendText(openId,
+								"订单<a href=\"" + PropKit.get("domain") + "/view/order_info.jsp?orderId=" + order.get("id") + "\">" + order.get("order_num") + "</a>" +
+										"支付成功！待设备修好回寄时我们将另行通知。感谢您使用金溢科技客户服务！\n<a href=\"" + PropKit.get("domain") + "/view/order_info.jsp?needInvoice=1&orderId=" + order.get("id") + "\">如需开具发票点击这里</a>");
 					}
-					ApiResult sendText = CustomServiceApi.sendText(openId,
-							"订单<a href=\"" + PropKit.get("domain") + "/view/order_info.jsp?orderId=" + order.get("id") + "\">" + order.get("order_num") + "</a>" +
-									"支付成功！\n您送修的设备已经维修完毕，请在3个工作日后前往送修的营业厅领取设备及发票。感谢您使用金溢科技客户服务！");
+					log.warn("更新订单信息:" + attach);
 				}else{
 					ApiResult sendText = CustomServiceApi.sendText(openId,
-							"订单<a href=\"" + PropKit.get("domain") + "/view/order_info.jsp?orderId=" + order.get("id") + "\">" +order.get("order_num")+"</a>" +
-								"支付成功！待设备修好回寄时我们将另行通知。感谢您使用金溢科技客户服务！\n<a href=\"" + PropKit.get("domain") + "/view/order_info.jsp?needInvoice=1&orderId=" + order.get("id") + "\">如需开具发票点击这里</a>");
+							"在线支付成功，支付金额:"+wx_total_fee.floatValue()+"(元)\n支付流水号:"+transaction_id);
 				}
-				log.warn("更新订单信息:"+attach);
 				//发送通知等
 
 				Map<String, String> xml = new HashMap<String, String>();

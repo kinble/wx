@@ -46,15 +46,17 @@ public class WeixinApiController extends ApiController {
 				"\t\t\t   \"url\":\""+ PropKit.get("domain")+"/redirect?state=bz\"\n" +
 				"            },\n" +
 				"            {\n" +
-				"               \"type\":\"click\",\n" +
+				"               \"type\":\"view\",\n" +
 				"               \"name\":\"在线支付\",\n" +
-				"\t\t\t   \"key\":\"V1001_ZZFF_ZXZF\"\n" +
+				//"\t\t\t   \"key\":\"V1001_ZZFF_ZXZF\"\n" +
+				"\t\t\t   \"url\":\""+ PropKit.get("domain")+"/redirect?state=zxzf\"\n" +
 				"            },\n" +
 				"            {\n" +
-				"               \"type\":\"click\",\n" +
-				"               \"name\":\"常用联系方式\",\n" +
-				"\t\t\t   \"key\":\"V1001_ZZFF_CYLXFS\"\n" +
-				"            }]\n" +
+				"               \"type\":\"view\",\n" +
+				"               \"name\":\"我的订单\",\n" +
+				"\t\t\t   \"url\":\""+ PropKit.get("domain")+"/redirect?state=orderlist\"\n" +
+				"            }\n" +
+				"]\n" +
 				"      },\n" +
 				"      {\n" +
 				"           \"name\":\"人工服务\",\n" +
@@ -83,7 +85,13 @@ public class WeixinApiController extends ApiController {
 				"               \"type\":\"click\",\n" +
 				"               \"name\":\"其他链接\",\n" +
 				"\t\t\t   \"key\":\"V1001_GDFF_QTLJ\"\n" +
-				"            }]\n" +
+				"            }," +
+				"            {\n" +
+				"               \"type\":\"click\",\n" +
+				"               \"name\":\"常用联系方式\",\n" +
+				"\t\t\t   \"key\":\"V1001_ZZFF_CYLXFS\"\n" +
+				"            }" +
+				"]\n" +
 				"       }]\n" +
 				" }";
 		ApiResult apiResult = MenuApi.createMenu(str);

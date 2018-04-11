@@ -32,7 +32,7 @@ public class JSSDKController extends Controller{
 
 
 	public void customer(){
-		render("customer.jsp");
+		render("cust_pay.jsp");
 	}
 	
 	public void pic(){
